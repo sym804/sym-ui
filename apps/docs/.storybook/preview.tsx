@@ -5,13 +5,9 @@ import { TooltipProvider } from "@sym/ui";
 
 const preview: Preview = {
   parameters: {
-    backgrounds: {
-      default: "light",
-      values: [
-        { name: "light", value: "#ffffff" },
-        { name: "dark", value: "#0f0e0c" },
-      ],
-    },
+    // backgrounds addon is intentionally disabled so the themed wrapper
+    // (bg-white / dark:bg-neutral-950) controls the canvas background.
+    backgrounds: { disable: true },
     a11y: { config: { rules: [] } },
   },
   decorators: [
@@ -21,7 +17,9 @@ const preview: Preview = {
     }),
     (Story) => (
       <TooltipProvider>
-        <Story />
+        <div className="min-h-screen bg-white text-neutral-900 transition-colors dark:bg-neutral-950 dark:text-neutral-50 p-6">
+          <Story />
+        </div>
       </TooltipProvider>
     ),
   ],

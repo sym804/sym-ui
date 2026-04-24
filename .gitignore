@@ -10,3 +10,4 @@ coverage
 !.env.example
 .superpowers/
 packages/cli/registry.json
+.tmp/
