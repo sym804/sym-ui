@@ -9,14 +9,14 @@
 html.dark .sbdocs,
 html.dark .sbdocs-wrapper,
 html.dark .sbdocs-content {
-  background: #0f0e0c !important;
+  background: #1a1815 !important;
 }
 
 html.dark .sbdocs,
 html.dark .sbdocs-wrapper,
 html.dark .sbdocs-content,
 html.dark .sbdocs-wrapper *:not(svg):not(path):not(button) {
-  color: #fafaf9 !important;
+  color: #e7e5e1 !important;
 }
 
 html.dark .sbdocs a,
@@ -31,12 +31,12 @@ html.dark .sbdocs-hr {
 
 html.dark .sbdocs code,
 html.dark .sbdocs pre {
-  background: #1a1815 !important;
+  background: #2a2724 !important;
 }
 
 html.dark .docblock-argstable-head,
 html.dark .docblock-argstable-body {
-  background: #1a1815 !important;
+  background: #2a2724 !important;
 }
 
 /* Typeset and other docblock cards paint a white surface behind their
