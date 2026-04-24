@@ -9,7 +9,7 @@
 html.dark .sbdocs,
 html.dark .sbdocs-wrapper,
 html.dark .sbdocs-content {
-  background: #1a1815 !important;
+  background: #2a2724 !important;
 }
 
 html.dark .sbdocs,
@@ -31,12 +31,12 @@ html.dark .sbdocs-hr {
 
 html.dark .sbdocs code,
 html.dark .sbdocs pre {
-  background: #2a2724 !important;
+  background: #433f3b !important;
 }
 
 html.dark .docblock-argstable-head,
 html.dark .docblock-argstable-body {
-  background: #2a2724 !important;
+  background: #433f3b !important;
 }
 
 /* Typeset and other docblock cards paint a white surface behind their

@@ -12,7 +12,7 @@ export const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDi
     <div
       ref={ref}
       className={cn(
-        "rounded-md border border-neutral-100 bg-white p-5 shadow-sm dark:border-neutral-700/50 dark:bg-neutral-800",
+        "rounded-md border border-neutral-100 bg-white p-5 shadow-sm dark:border-neutral-600/50 dark:bg-neutral-700",
         className,
       )}
       {...props}
@@ -52,7 +52,7 @@ export const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<
     <div
       ref={ref}
       className={cn(
-        "flex items-center justify-end gap-2 pt-3 mt-3 border-t border-neutral-100 dark:border-neutral-700/50",
+        "flex items-center justify-end gap-2 pt-3 mt-3 border-t border-neutral-100 dark:border-neutral-600/50",
         className,
       )}
       {...props}
