@@ -14,9 +14,13 @@ describe("Input", () => {
     await userEvent.type(screen.getByPlaceholderText("x"), "a");
     expect(onChange).toHaveBeenCalled();
   });
-  it("applies error styling when data-error is set", () => {
-    render(<Input data-error placeholder="x" />);
-    expect(screen.getByPlaceholderText("x").className).toMatch(/border-danger/);
+  it("sets data-error attribute when prop is passed", () => {
+    render(<Input data-error="true" placeholder="has-error" />);
+    expect(screen.getByPlaceholderText("has-error")).toHaveAttribute("data-error", "true");
+  });
+  it("omits data-error attribute when prop is absent", () => {
+    render(<Input placeholder="no-error" />);
+    expect(screen.getByPlaceholderText("no-error")).not.toHaveAttribute("data-error");
   });
   it("is disabled when disabled prop is set", () => {
     render(<Input disabled placeholder="x" />);

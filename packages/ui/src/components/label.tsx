@@ -19,7 +19,14 @@ export const Label = React.forwardRef<HTMLLabelElement, LabelProps>(
       {...props}
     >
       {children}
-      {required && <span className="ml-1 text-danger">*</span>}
+      {required && (
+        <>
+          <span aria-hidden="true" className="ml-1 text-danger">
+            *
+          </span>
+          <span className="sr-only"> (required)</span>
+        </>
+      )}
     </label>
   ),
 );
