@@ -1,0 +1,28 @@
+{
+  "name": "@sym/ui-cli",
+  "version": "0.0.0",
+  "type": "module",
+  "bin": { "sym-ui": "./dist/index.js" },
+  "main": "./dist/index.js",
+  "files": ["dist", "registry.json"],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src",
+    "registry:build": "tsx src/scripts/build-registry.ts"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "prompts": "^2.4.2",
+    "kleur": "^4.1.5",
+    "fs-extra": "^11.2.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/prompts": "^2.4.9",
+    "@types/node": "^22.7.4",
+    "tsup": "^8.3.0",
+    "tsx": "^4.19.1"
+  }
+}
