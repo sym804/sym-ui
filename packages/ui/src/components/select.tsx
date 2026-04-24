@@ -76,7 +76,7 @@ export const SelectItem = React.forwardRef<
     ref={ref}
     className={cn(
       "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none dark:text-[#d1d4dc]",
-      "focus:bg-neutral-100 focus:text-neutral-900 dark:focus:bg-[#262a36] dark:focus:text-neutral-100",
+      "focus:bg-neutral-100 focus:text-neutral-900 dark:focus:bg-[#262a36] dark:focus:text-[#d1d4dc]",
       "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       className,
     )}
@@ -94,6 +94,6 @@ export const SelectSeparator = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Separator>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Separator>
 >(({ className, ...props }, ref) => (
-  <SelectPrimitive.Separator ref={ref} className={cn("-mx-1 my-1 h-px bg-neutral-100 dark:bg-[#1e222d]", className)} {...props} />
+  <SelectPrimitive.Separator ref={ref} className={cn("-mx-1 my-1 h-px bg-neutral-100 dark:bg-[#2a2d3e]", className)} {...props} />
 ));
 SelectSeparator.displayName = SelectPrimitive.Separator.displayName;
