@@ -1304,7 +1304,10 @@ describe("Tooltip", () => {
       </TooltipProvider>,
     );
     await userEvent.hover(screen.getByText("Hover me"));
-    expect(await screen.findByText("Helpful hint")).toBeInTheDocument();
+    // Radix Tooltip renders the content twice: once visible, once as an
+    // sr-only role="tooltip" sibling for screen readers. Assert via role
+    // so we target the authoritative accessibility node.
+    expect(await screen.findByRole("tooltip")).toHaveTextContent("Helpful hint");
   });
 });
 ```
