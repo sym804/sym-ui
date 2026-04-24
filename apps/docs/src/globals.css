@@ -1,1 +1,47 @@
 @import "@sym/ui/templates/globals.css";
+
+/* Storybook docs (MDX) dark mode overrides.
+   @storybook/blocks uses emotion with randomly-generated class names, so
+   we cannot target the inner typography reliably by class. Instead we
+   broadly invert everything inside the docs wrapper with !important.
+   Swatch colors render via background-color so text-only overrides here
+   do not affect them. */
+html.dark .sbdocs,
+html.dark .sbdocs-wrapper,
+html.dark .sbdocs-content {
+  background: #0f0e0c !important;
+}
+
+html.dark .sbdocs,
+html.dark .sbdocs-wrapper,
+html.dark .sbdocs-content,
+html.dark .sbdocs-wrapper *:not(svg):not(path):not(button) {
+  color: #fafaf9 !important;
+}
+
+html.dark .sbdocs a,
+html.dark .sbdocs-a {
+  color: #60a5fa !important;
+}
+
+html.dark .sbdocs hr,
+html.dark .sbdocs-hr {
+  border-color: #2a2724 !important;
+}
+
+html.dark .sbdocs code,
+html.dark .sbdocs pre {
+  background: #1a1815 !important;
+}
+
+html.dark .docblock-argstable-head,
+html.dark .docblock-argstable-body {
+  background: #1a1815 !important;
+}
+
+/* Typeset and other docblock cards paint a white surface behind their
+   content. Make them transparent so the page background shows through. */
+html.dark .docblock-typeset,
+html.dark [class*="docblock-"] {
+  background: transparent !important;
+}

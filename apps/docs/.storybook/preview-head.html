@@ -1,0 +1,38 @@
+<script>
+  // Mirror the Storybook `theme` global from the URL onto <html class="dark">.
+  // Needed because @storybook/addon-themes' `withThemeByClassName` decorator
+  // does not fire for MDX-only docs pages in Storybook 8, which leaves the
+  // class off and the dark: utilities inert.
+  (function () {
+    function readTheme() {
+      // Storybook URL-encodes the colon in `globals=theme:dark` as `theme%3Adark`,
+      // so decode before matching.
+      var search;
+      try {
+        search = decodeURIComponent(window.location.search);
+      } catch (e) {
+        search = window.location.search;
+      }
+      var m = search.match(/theme:([\w-]+)/);
+      return m ? m[1] : "light";
+    }
+    function apply() {
+      var theme = readTheme();
+      var root = document.documentElement;
+      if (theme === "dark") root.classList.add("dark");
+      else root.classList.remove("dark");
+    }
+    apply();
+    window.addEventListener("popstate", apply);
+    var origPush = history.pushState;
+    history.pushState = function () {
+      origPush.apply(this, arguments);
+      apply();
+    };
+    var origReplace = history.replaceState;
+    history.replaceState = function () {
+      origReplace.apply(this, arguments);
+      apply();
+    };
+  })();
+</script>
