@@ -17,7 +17,7 @@ const preview: Preview = {
     }),
     (Story) => (
       <TooltipProvider>
-        <div className="min-h-screen bg-white text-neutral-900 transition-colors dark:bg-neutral-800 dark:text-neutral-200 p-6">
+        <div className="min-h-screen bg-white text-neutral-900 transition-colors dark:bg-[#131722] dark:text-[#d1d4dc] p-6">
           <Story />
         </div>
       </TooltipProvider>

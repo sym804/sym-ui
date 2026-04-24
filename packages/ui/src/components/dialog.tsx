@@ -40,7 +40,7 @@ export const DialogContent = React.forwardRef<
       ref={ref}
       className={cn(
         "fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2",
-        "rounded-md border border-neutral-100 bg-white p-6 shadow-lg dark:border-neutral-600/50 dark:bg-neutral-700",
+        "rounded-md border border-neutral-100 bg-white p-6 shadow-lg dark:border-[#2a2d3e] dark:bg-[#1e222d]",
         "data-[state=open]:animate-in data-[state=closed]:animate-out",
         "data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0",
         "data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95",
@@ -68,7 +68,7 @@ export const DialogTitle = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
 >(({ className, ...props }, ref) => (
-  <DialogPrimitive.Title ref={ref} className={cn("text-lg font-bold text-neutral-900 dark:text-neutral-200", className)} {...props} />
+  <DialogPrimitive.Title ref={ref} className={cn("text-lg font-bold text-neutral-900 dark:text-[#d1d4dc]", className)} {...props} />
 ));
 DialogTitle.displayName = DialogPrimitive.Title.displayName;
 
@@ -76,6 +76,6 @@ export const DialogDescription = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Description>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
 >(({ className, ...props }, ref) => (
-  <DialogPrimitive.Description ref={ref} className={cn("text-sm text-neutral-500 dark:text-neutral-400", className)} {...props} />
+  <DialogPrimitive.Description ref={ref} className={cn("text-sm text-neutral-500 dark:text-[#787b86]", className)} {...props} />
 ));
 DialogDescription.displayName = DialogPrimitive.Description.displayName;
