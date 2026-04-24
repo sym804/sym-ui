@@ -18,10 +18,10 @@ export const Image: Story = {
 export const Stack: Story = {
   render: () => (
     <div className="flex -space-x-2">
-      <Avatar className="ring-2 ring-white"><AvatarFallback>SY</AvatarFallback></Avatar>
-      <Avatar className="ring-2 ring-white"><AvatarFallback>KH</AvatarFallback></Avatar>
-      <Avatar className="ring-2 ring-white bg-neutral-200">
-        <AvatarFallback className="bg-neutral-200 from-neutral-200 to-neutral-200 text-neutral-600">+5</AvatarFallback>
+      <Avatar className="ring-2 ring-white dark:ring-neutral-900"><AvatarFallback>SY</AvatarFallback></Avatar>
+      <Avatar className="ring-2 ring-white dark:ring-neutral-900"><AvatarFallback>KH</AvatarFallback></Avatar>
+      <Avatar className="ring-2 ring-white dark:ring-neutral-900 bg-neutral-200 dark:bg-neutral-700">
+        <AvatarFallback className="bg-neutral-200 from-neutral-200 to-neutral-200 text-neutral-600 dark:bg-neutral-700 dark:from-neutral-700 dark:to-neutral-700 dark:text-neutral-300">+5</AvatarFallback>
       </Avatar>
     </div>
   ),

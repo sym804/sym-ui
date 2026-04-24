@@ -1,4 +1,5 @@
 import type { Preview } from "@storybook/react";
+import { withThemeByClassName } from "@storybook/addon-themes";
 import "../src/globals.css";
 import { TooltipProvider } from "@sym/ui";
 
@@ -14,6 +15,10 @@ const preview: Preview = {
     a11y: { config: { rules: [] } },
   },
   decorators: [
+    withThemeByClassName({
+      themes: { light: "", dark: "dark" },
+      defaultTheme: "light",
+    }),
     (Story) => (
       <TooltipProvider>
         <Story />
