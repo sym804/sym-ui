@@ -1,0 +1,12 @@
+node_modules
+dist
+.turbo
+.next
+storybook-static
+*.tsbuildinfo
+.DS_Store
+coverage
+.env*
+!.env.example
+.superpowers/
+packages/cli/registry.json
