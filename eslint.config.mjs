@@ -17,6 +17,7 @@ export default tseslint.config(
       ...react.configs.recommended.rules,
       ...hooks.configs.recommended.rules,
       "react/react-in-jsx-scope": "off",
+      "react/prop-types": "off",
       "@typescript-eslint/consistent-type-imports": "error",
       "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }]
     }
