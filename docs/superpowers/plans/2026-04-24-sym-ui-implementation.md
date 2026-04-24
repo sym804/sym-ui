@@ -651,7 +651,8 @@ describe("cn", () => {
     expect(cn("px-2 py-1", "px-4")).toBe("py-1 px-4");
   });
   it("handles conditional classes", () => {
-    expect(cn("a", false && "b", "c")).toBe("a c");
+    const show = false as boolean;
+    expect(cn("a", show && "b", "c")).toBe("a c");
   });
   it("handles undefined/null", () => {
     expect(cn("a", undefined, null, "b")).toBe("a b");
