@@ -651,7 +651,8 @@ describe("cn", () => {
     expect(cn("px-2 py-1", "px-4")).toBe("py-1 px-4");
   });
   it("handles conditional classes", () => {
-    expect(cn("a", false && "b", "c")).toBe("a c");
+    const show = false as boolean;
+    expect(cn("a", show && "b", "c")).toBe("a c");
   });
   it("handles undefined/null", () => {
     expect(cn("a", undefined, null, "b")).toBe("a b");
@@ -1303,7 +1304,10 @@ describe("Tooltip", () => {
       </TooltipProvider>,
     );
     await userEvent.hover(screen.getByText("Hover me"));
-    expect(await screen.findByText("Helpful hint")).toBeInTheDocument();
+    // Radix Tooltip renders the content twice: once visible, once as an
+    // sr-only role="tooltip" sibling for screen readers. Assert via role
+    // so we target the authoritative accessibility node.
+    expect(await screen.findByRole("tooltip")).toHaveTextContent("Helpful hint");
   });
 });
 ```

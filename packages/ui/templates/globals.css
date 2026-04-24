@@ -1,0 +1,26 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 24 12% 10%;
+    --muted: 30 10% 96%;
+    --muted-foreground: 30 4% 45%;
+    --ring: 217 91% 60%;
+  }
+  .dark {
+    --background: 24 12% 6%;
+    --foreground: 30 10% 96%;
+    --muted: 30 5% 16%;
+    --muted-foreground: 30 4% 62%;
+    --ring: 213 93% 72%;
+  }
+  html { font-family: theme("fontFamily.sans"); }
+  body { background-color: hsl(var(--background)); color: hsl(var(--foreground)); }
+  code, kbd, pre, samp { font-family: theme("fontFamily.mono"); }
+}
