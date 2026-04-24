@@ -1,0 +1,17 @@
+import { Meta, ColorPalette, ColorItem } from "@storybook/blocks";
+import { colors } from "@sym/ui/tokens";
+
+<Meta title="Brand/Color Palette" />
+
+# Color Tokens
+
+<ColorPalette>
+  <ColorItem title="primary" subtitle="Brand" colors={colors.primary} />
+  <ColorItem title="neutral" subtitle="Warm Gray" colors={colors.neutral} />
+  <ColorItem title="semantic" subtitle="Status" colors={{
+    success: colors.semantic.success,
+    warning: colors.semantic.warning,
+    danger: colors.semantic.danger,
+    info: colors.semantic.info,
+  }} />
+</ColorPalette>
