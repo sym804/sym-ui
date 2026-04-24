@@ -13,12 +13,12 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        primary: "bg-primary-50 text-primary-700",
-        neutral: "bg-neutral-100 text-neutral-700",
-        success: "bg-success/10 text-success",
-        warning: "bg-warning/10 text-warning",
-        danger: "bg-danger/10 text-danger",
-        outline: "border border-neutral-200 text-neutral-700",
+        primary: "bg-primary-50 text-primary-700 dark:bg-primary-950/40 dark:text-primary-300",
+        neutral: "bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300",
+        success: "bg-success/10 text-success dark:bg-success/20",
+        warning: "bg-warning/10 text-warning dark:bg-warning/20",
+        danger: "bg-danger/10 text-danger dark:bg-danger/20",
+        outline: "border border-neutral-200 text-neutral-700 dark:border-neutral-700 dark:text-neutral-300",
       },
     },
     defaultVariants: { variant: "primary" },
