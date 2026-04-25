@@ -21,5 +21,7 @@ export * from "./components/sheet";
 export * from "./components/command";
 export * from "./components/combobox";
 export * from "./components/data-table";
+export * from "./components/calendar";
+export * from "./components/date-picker";
 export * from "./lib/utils";
 export * as tokens from "./tokens";
