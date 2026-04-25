@@ -18,5 +18,7 @@ export * from "./components/accordion";
 export * from "./components/progress";
 export * from "./components/radio-group";
 export * from "./components/sheet";
+export * from "./components/command";
+export * from "./components/combobox";
 export * from "./lib/utils";
 export * as tokens from "./tokens";
