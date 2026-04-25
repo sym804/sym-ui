@@ -76,10 +76,11 @@ export const Combobox = React.forwardRef<HTMLButtonElement, ComboboxProps>(
                 {options.map((opt) => (
                   <CommandItem
                     key={opt.value}
-                    value={opt.label}
+                    value={opt.value}
+                    keywords={[opt.label]}
                     disabled={opt.disabled}
-                    onSelect={() => {
-                      onValueChange?.(opt.value);
+                    onSelect={(selectedValue) => {
+                      onValueChange?.(selectedValue);
                       setOpen(false);
                     }}
                   >
