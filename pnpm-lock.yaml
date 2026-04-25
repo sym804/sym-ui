@@ -142,9 +142,6 @@ importers:
 
   packages/ui:
     dependencies:
-      '@hookform/resolvers':
-        specifier: ^5.2.2
-        version: 5.2.2(react-hook-form@7.73.1(react@18.3.1))
       '@radix-ui/react-accordion':
         specifier: ^1.2.12
         version: 1.2.12(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -205,16 +202,13 @@ importers:
       react-day-picker:
         specifier: ^8.10.1
         version: 8.10.1(date-fns@3.6.0)(react@18.3.1)
-      react-hook-form:
-        specifier: ^7.73.1
-        version: 7.73.1(react@18.3.1)
       tailwind-merge:
         specifier: ^2.5.2
         version: 2.6.1
-      zod:
-        specifier: ^4.3.6
-        version: 4.3.6
     devDependencies:
+      '@hookform/resolvers':
+        specifier: ^5.2.2
+        version: 5.2.2(react-hook-form@7.73.1(react@18.3.1))
       '@testing-library/jest-dom':
         specifier: ^6.5.0
         version: 6.9.1
@@ -239,6 +233,9 @@ importers:
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
+      react-hook-form:
+        specifier: ^7.73.1
+        version: 7.73.1(react@18.3.1)
       tailwindcss:
         specifier: ^3.4.13
         version: 3.4.19(tsx@4.21.0)
@@ -248,6 +245,9 @@ importers:
       vitest:
         specifier: ^2.1.1
         version: 2.1.9(@types/node@22.19.17)(jsdom@25.0.1)
+      zod:
+        specifier: ^4.3.6
+        version: 4.3.6
 
 packages:
 
