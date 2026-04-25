@@ -52,12 +52,14 @@ export const FormItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HT
 );
 FormItem.displayName = "FormItem";
 
-function useFormFieldIds() {
+export function useFormFieldIds() {
   const fieldCtx = React.useContext(FormFieldContext);
   const itemCtx = React.useContext(FormItemContext);
   if (!fieldCtx) throw new Error("Form components must be used within a <FormField>");
   if (!itemCtx) throw new Error("Form components must be used within a <FormItem>");
-  const { getFieldState, formState } = useFormContext();
+  const form = useFormContext();
+  if (!form) throw new Error("Form components must be used within a <Form>");
+  const { getFieldState, formState } = form;
   const state = getFieldState(fieldCtx.name, formState);
   return {
     id: itemCtx.id,
