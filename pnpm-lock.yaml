@@ -54,6 +54,9 @@ importers:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
     devDependencies:
+      '@hookform/resolvers':
+        specifier: ^5.2.2
+        version: 5.2.2(react-hook-form@7.73.1(react@18.3.1))
       '@storybook/addon-a11y':
         specifier: ^8.3.0
         version: 8.6.18(storybook@8.6.18(prettier@3.8.3))
@@ -72,6 +75,9 @@ importers:
       '@storybook/react-vite':
         specifier: ^8.3.0
         version: 8.6.18(@storybook/test@8.6.18(storybook@8.6.18(prettier@3.8.3)))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@4.60.2)(storybook@8.6.18(prettier@3.8.3))(typescript@5.9.3)(vite@5.4.21(@types/node@22.19.17))
+      '@tanstack/react-table':
+        specifier: ^8.21.3
+        version: 8.21.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@types/react':
         specifier: ^18.3.10
         version: 18.3.28
@@ -87,6 +93,9 @@ importers:
       postcss:
         specifier: ^8.4.47
         version: 8.5.10
+      react-hook-form:
+        specifier: ^7.73.1
+        version: 7.73.1(react@18.3.1)
       storybook:
         specifier: ^8.3.0
         version: 8.6.18(prettier@3.8.3)
@@ -96,6 +105,9 @@ importers:
       vite:
         specifier: ^5.4.8
         version: 5.4.21(@types/node@22.19.17)
+      zod:
+        specifier: ^4.3.6
+        version: 4.3.6
 
   packages/cli:
     dependencies:
