@@ -22,4 +22,16 @@ describe("Progress", () => {
     expect(bar?.getAttribute("aria-valuenow")).toBeNull();
     expect(bar?.getAttribute("data-state")).toBe("indeterminate");
   });
+
+  it("scales transform by custom max", () => {
+    const { container } = render(<Progress value={50} max={200} />);
+    const indicator = container.querySelector<HTMLElement>("[data-progress-indicator]");
+    expect(indicator?.style.transform).toBe("translateX(-75%)");
+  });
+
+  it("treats out-of-range value as indeterminate", () => {
+    const { container } = render(<Progress value={150} max={100} />);
+    const bar = container.querySelector('[role="progressbar"]');
+    expect(bar?.getAttribute("data-state")).toBe("indeterminate");
+  });
 });

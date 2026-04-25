@@ -9,7 +9,7 @@
     ".": "./src/index.ts",
     "./tokens": "./src/tokens/index.ts",
     "./lib/utils": "./src/lib/utils.ts",
-    "./tailwind.preset": "./tailwind.preset.js",
+    "./tailwind.preset": "./tailwind.preset.cjs",
     "./templates/globals.css": "./templates/globals.css"
   },
   "scripts": {
