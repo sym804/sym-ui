@@ -23,5 +23,6 @@ export * from "./components/combobox";
 export * from "./components/data-table";
 export * from "./components/calendar";
 export * from "./components/date-picker";
+export * from "./components/form";
 export * from "./lib/utils";
 export * as tokens from "./tokens";
