@@ -15,4 +15,11 @@ describe("Progress", () => {
     const indicator = container.querySelector<HTMLElement>("[data-progress-indicator]");
     expect(indicator?.style.transform).toBe("translateX(-75%)");
   });
+
+  it("renders in indeterminate state when value is null", () => {
+    const { container } = render(<Progress value={null} />);
+    const bar = container.querySelector('[role="progressbar"]');
+    expect(bar?.getAttribute("aria-valuenow")).toBeNull();
+    expect(bar?.getAttribute("data-state")).toBe("indeterminate");
+  });
 });

@@ -23,8 +23,10 @@ export const Progress = React.forwardRef<
   >
     <ProgressPrimitive.Indicator
       data-progress-indicator
-      className="h-full w-full flex-1 bg-blue-500 transition-all dark:bg-[#3d7eff]"
-      style={{ transform: `translateX(-${100 - (value ?? 0)}%)` }}
+      className="h-full w-full flex-1 bg-blue-500 transition-transform dark:bg-[#3d7eff]"
+      style={{
+        transform: typeof value === "number" ? `translateX(-${100 - value}%)` : undefined,
+      }}
     />
   </ProgressPrimitive.Root>
 ));
