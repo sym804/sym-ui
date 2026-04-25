@@ -28,6 +28,7 @@ export const CommandInput = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Input>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
 >(({ className, ...props }, ref) => (
+  // eslint-disable-next-line react/no-unknown-property -- cmdk-input-wrapper is a styling hook recognized by cmdk and shadcn/ui convention.
   <div className="flex items-center border-b border-neutral-100 px-3 dark:border-[#2a2d3e]" cmdk-input-wrapper="">
     <span aria-hidden className="mr-2 h-4 w-4 shrink-0 opacity-50">⌕</span>
     <CommandPrimitive.Input
