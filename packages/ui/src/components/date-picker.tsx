@@ -12,8 +12,8 @@ import { Button } from "./button";
 import { cn } from "../lib/utils";
 
 export interface DatePickerProps {
-  value?: Date;
-  onChange?: (date: Date | undefined) => void;
+  value: Date | undefined;
+  onChange: (date: Date | undefined) => void;
   placeholder?: string;
   disabled?: boolean;
   className?: string;
@@ -42,7 +42,7 @@ export const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
             mode="single"
             selected={value}
             onSelect={(d) => {
-              onChange?.(d);
+              onChange(d);
               if (d) setOpen(false);
             }}
             initialFocus
