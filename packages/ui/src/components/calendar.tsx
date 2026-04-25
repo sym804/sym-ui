@@ -15,7 +15,7 @@ export function Calendar({ className, classNames, showOutsideDays = true, ...pro
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      className={cn("p-3 text-neutral-900 dark:text-[#d1d4dc]", className)}
+      className={cn("m-0 p-3 text-neutral-900 dark:text-[#d1d4dc]", className)}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
         month: "space-y-4",
