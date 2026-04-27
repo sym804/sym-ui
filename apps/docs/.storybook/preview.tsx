@@ -6,7 +6,7 @@ import { TooltipProvider } from "@sym/ui";
 const preview: Preview = {
   parameters: {
     // backgrounds addon is intentionally disabled so the themed wrapper
-    // (bg-white / dark:bg-neutral-950) controls the canvas background.
+    // (bg-background) controls the canvas background via semantic tokens.
     backgrounds: { disable: true },
     a11y: { config: { rules: [] } },
   },
@@ -17,7 +17,7 @@ const preview: Preview = {
     }),
     (Story) => (
       <TooltipProvider>
-        <div className="min-h-screen bg-white text-neutral-900 transition-colors dark:bg-[#131722] dark:text-[#d1d4dc] p-6">
+        <div className="min-h-screen bg-background text-foreground transition-colors p-6">
           <Story />
         </div>
       </TooltipProvider>

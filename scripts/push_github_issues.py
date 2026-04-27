@@ -264,6 +264,16 @@ ISSUES = [
       "cause_fix": "원인: --overlay 토큰 미정의.\n수정: globals.css 에 --overlay 정의, tailwind.preset.cjs 에 overlay 토큰 추가, bg-overlay/50 으로 통일.",
       "scope": "Dialog, Sheet, globals.css, tailwind.preset.cjs",
       "found_version": "@sym/ui 0.1.0 (수정 도중)"}),
+
+    # === Gemini 외부 평가 후 발견 ===
+    (28, "bug", "minor", "etc",
+     "Storybook preview.tsx wrapper decorator 가 dark:[#131722]/[#d1d4dc] 하드코딩 (토큰 마이그레이션 누락)",
+     "docs 0.0.0 (post-v0.1.0)",
+     {"prereq": "Storybook 다크모드 전환",
+      "repro": "1. apps/docs/.storybook/preview.tsx 의 Story wrapper 가 dark:bg-[#131722] dark:text-[#d1d4dc] 사용\n2. v0.1.0 토큰 마이그레이션 시 컴포넌트만 grep 해서 docs preview decorator 누락\n3. 다크 토큰 시스템 일관성 깨짐",
+      "cause_fix": "원인: Codex 가 packages/ui/src/components/ 만 검사하고 apps/docs 는 범위 외였음.\n수정: bg-background text-foreground 토큰으로 교체, 주석도 갱신.",
+      "scope": "apps/docs/.storybook (라이브러리 출판물에는 영향 없음)",
+      "found_version": "@sym/ui 0.1.0 (docs decorator 잔존)"}),
 ]
 
 

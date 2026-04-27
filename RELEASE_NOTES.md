@@ -66,3 +66,7 @@
 
 - 기존 컴포넌트 API 변경 없음. 단, Button 에 `asChild?: boolean` prop 이 추가됨.
 - 다크 토큰 시스템은 신규 도입이지만 기존 Tailwind 색 스케일 (neutral, primary 50-950) 은 그대로 유지되어 backward compatible.
+
+### v0.1.0 후속 (docs 영역, 라이브러리 출판물 영향 없음)
+
+- **#28 Storybook preview.tsx wrapper decorator 토큰화** (Minor, etc) - Gemini 외부 평가에서 발견. v0.1.0 에서 Codex 가 `packages/ui/src/components/` 만 grep 해서 `apps/docs/.storybook/preview.tsx` 의 `dark:bg-[#131722] dark:text-[#d1d4dc]` 잔존 누락. `bg-background text-foreground` 로 교체. (apps/docs 만 영향)
