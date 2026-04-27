@@ -4,7 +4,7 @@ import path from "node:path";
 import prompts from "prompts";
 import kleur from "kleur";
 import { findConfigFile, ensureDir } from "../utils/fs.js";
-import { installPackages } from "../utils/runner.js";
+import { installPackages, InstallError } from "../utils/runner.js";
 
 const GLOBALS_CSS = `@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css");
 @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap");
@@ -44,8 +44,13 @@ export async function initCommand() {
     message: "컴포넌트를 저장할 경로?",
     initial: "src/components/ui",
   });
+  if (typeof componentsDir !== "string" || componentsDir.trim() === "") {
+    console.log(kleur.yellow("취소되었습니다."));
+    return;
+  }
+  const safeComponentsDir = componentsDir.trim();
   const libDir = path.join(cwd, "src/lib");
-  await ensureDir(path.join(cwd, componentsDir));
+  await ensureDir(path.join(cwd, safeComponentsDir));
   await ensureDir(libDir);
   await fs.writeFile(path.join(libDir, "utils.ts"), CN_UTIL);
 
@@ -65,12 +70,20 @@ export async function initCommand() {
   }
 
   // 4. 기본 의존성 설치
-  await installPackages(["clsx", "tailwind-merge", "class-variance-authority"], cwd);
+  try {
+    await installPackages(["clsx", "tailwind-merge", "class-variance-authority"], cwd);
+  } catch (err) {
+    if (err instanceof InstallError) {
+      console.log(kleur.red(`✗ 기본 의존성 설치 실패: ${err.message}`));
+      process.exit(err.code === 0 ? 1 : err.code);
+    }
+    throw err;
+  }
 
   // 5. 설정 파일 저장
   await fs.writeJson(
     path.join(cwd, "sym-ui.json"),
-    { componentsDir, utilsPath: "src/lib/utils" },
+    { componentsDir: safeComponentsDir, utilsPath: "src/lib/utils" },
     { spaces: 2 },
   );
 

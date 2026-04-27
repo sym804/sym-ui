@@ -31,7 +31,7 @@ export const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
             type="button"
             variant="outline"
             disabled={disabled}
-            className={cn("w-[220px] justify-start text-left font-normal", !value && "text-neutral-400 dark:text-[#787b86]", className)}
+            className={cn("w-[220px] justify-start text-left font-normal", !value && "text-muted-foreground", className)}
           >
             <span aria-hidden className="mr-2">▦</span>
             {value ? format(value, dateFormat) : placeholder}

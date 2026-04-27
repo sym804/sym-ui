@@ -5,7 +5,7 @@ import hooks from "eslint-plugin-react-hooks";
 import a11y from "eslint-plugin-jsx-a11y";
 
 export default tseslint.config(
-  { ignores: ["**/dist/**", "**/storybook-static/**", "**/.turbo/**"] },
+  { ignores: ["**/dist/**", "**/storybook-static/**", "**/.turbo/**", "**/*.cjs"] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {

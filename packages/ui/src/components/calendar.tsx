@@ -15,7 +15,7 @@ export function Calendar({ className, classNames, showOutsideDays = true, ...pro
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      className={cn("m-0 p-3 text-neutral-900 dark:text-[#d1d4dc]", className)}
+      className={cn("m-0 p-3 text-foreground", className)}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
         month: "space-y-4",
@@ -23,26 +23,26 @@ export function Calendar({ className, classNames, showOutsideDays = true, ...pro
         caption_label: "text-sm font-medium",
         nav: "space-x-1 flex items-center",
         nav_button: cn(
-          "inline-flex items-center justify-center rounded-md h-7 w-7 bg-transparent p-0 opacity-70 hover:opacity-100",
-          "hover:bg-neutral-100 dark:hover:bg-[#262a36]",
+          "inline-flex items-center justify-center rounded-md h-7 w-7 bg-transparent p-0 opacity-70 hover:opacity-100 hover:bg-muted",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background",
         ),
         nav_button_previous: "absolute left-1",
         nav_button_next: "absolute right-1",
         table: "w-full border-collapse space-y-1",
         head_row: "flex",
-        head_cell: "text-neutral-500 rounded-md w-9 font-normal text-xs dark:text-[#787b86]",
+        head_cell: "text-muted-foreground rounded-md w-9 font-normal text-xs",
         row: "flex w-full mt-2",
         cell: "text-center text-sm p-0 relative focus-within:relative focus-within:z-20",
         day: cn(
-          "inline-flex items-center justify-center rounded-md h-9 w-9 p-0 font-normal aria-selected:opacity-100",
-          "hover:bg-neutral-100 dark:hover:bg-[#262a36]",
+          "inline-flex items-center justify-center rounded-md h-9 w-9 p-0 font-normal aria-selected:opacity-100 hover:bg-muted",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background",
         ),
         day_selected:
-          "bg-blue-500 text-white hover:bg-blue-500 hover:text-white focus:bg-blue-500 focus:text-white dark:bg-[#3d7eff] dark:hover:bg-[#3d7eff]",
-        day_today: "bg-neutral-100 text-neutral-900 dark:bg-[#262a36] dark:text-[#d1d4dc]",
-        day_outside: "text-neutral-400 opacity-50 dark:text-[#4a4d55]",
-        day_disabled: "text-neutral-400 opacity-50",
-        day_range_middle: "aria-selected:bg-neutral-100 aria-selected:text-neutral-900",
+          "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
+        day_today: "bg-muted text-foreground",
+        day_outside: "text-muted-foreground opacity-50",
+        day_disabled: "text-muted-foreground opacity-40 cursor-not-allowed",
+        day_range_middle: "aria-selected:bg-muted aria-selected:text-muted-foreground",
         day_hidden: "invisible",
         ...classNames,
       }}

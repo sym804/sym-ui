@@ -4,7 +4,7 @@ import path from "node:path";
 import prompts from "prompts";
 import kleur from "kleur";
 import { loadRegistry } from "../utils/registry.js";
-import { installPackages } from "../utils/runner.js";
+import { installPackages, InstallError } from "../utils/runner.js";
 
 export async function addCommand(components: string[], opts: { yes?: boolean }) {
   const cwd = process.cwd();
@@ -24,6 +24,10 @@ export async function addCommand(components: string[], opts: { yes?: boolean }) 
       choices: registry.map((r) => ({ title: r.name, value: r.name })),
       min: 1,
     });
+    if (!Array.isArray(selected) || selected.length === 0) {
+      console.log(kleur.yellow("취소되었습니다."));
+      return;
+    }
     components = selected as string[];
   }
 
@@ -50,7 +54,15 @@ export async function addCommand(components: string[], opts: { yes?: boolean }) 
     console.log(kleur.green(`✓ ${name} → ${path.relative(cwd, target)}`));
 
     if (entry.dependencies.length > 0) {
-      await installPackages(entry.dependencies, cwd);
+      try {
+        await installPackages(entry.dependencies, cwd);
+      } catch (err) {
+        if (err instanceof InstallError) {
+          console.log(kleur.red(`✗ ${name} 의존성 설치 실패: ${err.message}`));
+          process.exit(err.code === 0 ? 1 : err.code);
+        }
+        throw err;
+      }
     }
   }
   console.log(kleur.bold().green("\n완료"));

@@ -14,11 +14,7 @@ export const Command = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <CommandPrimitive
     ref={ref}
-    className={cn(
-      "flex h-full w-full flex-col overflow-hidden rounded-md bg-white text-neutral-900",
-      "dark:bg-[#1e222d] dark:text-[#d1d4dc]",
-      className,
-    )}
+    className={cn("flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground", className)}
     {...props}
   />
 ));
@@ -29,13 +25,13 @@ export const CommandInput = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
 >(({ className, ...props }, ref) => (
   // eslint-disable-next-line react/no-unknown-property -- cmdk-input-wrapper is a styling hook recognized by cmdk and shadcn/ui convention.
-  <div className="flex items-center border-b border-neutral-100 px-3 dark:border-[#2a2d3e]" cmdk-input-wrapper="">
+  <div className="flex items-center border-b border-border px-3" cmdk-input-wrapper="">
     <span aria-hidden className="mr-2 h-4 w-4 shrink-0 opacity-50">⌕</span>
     <CommandPrimitive.Input
       ref={ref}
       className={cn(
-        "flex h-11 w-full bg-transparent py-3 text-sm outline-none placeholder:text-neutral-400",
-        "disabled:cursor-not-allowed disabled:opacity-50 dark:placeholder:text-[#787b86]",
+        "flex h-11 w-full bg-transparent py-3 text-sm text-foreground outline-none placeholder:text-muted-foreground",
+        "disabled:cursor-not-allowed disabled:opacity-50",
         className,
       )}
       {...props}
@@ -59,7 +55,7 @@ CommandList.displayName = CommandPrimitive.List.displayName;
 export const CommandEmpty = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Empty>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Empty>
->((props, ref) => <CommandPrimitive.Empty ref={ref} className="py-6 text-center text-sm" {...props} />);
+>((props, ref) => <CommandPrimitive.Empty ref={ref} className="py-6 text-center text-sm text-muted-foreground" {...props} />);
 CommandEmpty.displayName = CommandPrimitive.Empty.displayName;
 
 export const CommandGroup = React.forwardRef<
@@ -69,9 +65,9 @@ export const CommandGroup = React.forwardRef<
   <CommandPrimitive.Group
     ref={ref}
     className={cn(
-      "overflow-hidden p-1 text-neutral-900 dark:text-[#d1d4dc]",
+      "overflow-hidden p-1 text-foreground",
       "[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs",
-      "[&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-neutral-500 dark:[&_[cmdk-group-heading]]:text-[#787b86]",
+      "[&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground",
       className,
     )}
     {...props}
@@ -83,11 +79,7 @@ export const CommandSeparator = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Separator>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Separator>
 >(({ className, ...props }, ref) => (
-  <CommandPrimitive.Separator
-    ref={ref}
-    className={cn("-mx-1 h-px bg-neutral-100 dark:bg-[#2a2d3e]", className)}
-    {...props}
-  />
+  <CommandPrimitive.Separator ref={ref} className={cn("-mx-1 h-px bg-border", className)} {...props} />
 ));
 CommandSeparator.displayName = CommandPrimitive.Separator.displayName;
 
@@ -99,8 +91,7 @@ export const CommandItem = React.forwardRef<
     ref={ref}
     className={cn(
       "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none",
-      "aria-selected:bg-neutral-100 aria-selected:text-neutral-900",
-      "dark:aria-selected:bg-[#262a36] dark:aria-selected:text-[#d1d4dc]",
+      "aria-selected:bg-accent aria-selected:text-accent-foreground",
       "data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50",
       className,
     )}

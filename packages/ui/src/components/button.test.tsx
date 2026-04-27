@@ -17,7 +17,7 @@ describe("Button", () => {
   });
   it("applies variant classes", () => {
     render(<Button variant="destructive">Delete</Button>);
-    expect(screen.getByRole("button").className).toMatch(/bg-danger/);
+    expect(screen.getByRole("button").className).toMatch(/bg-destructive/);
   });
   it("applies size classes", () => {
     render(<Button size="sm">Small</Button>);

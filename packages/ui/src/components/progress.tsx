@@ -12,23 +12,21 @@ export const Progress = React.forwardRef<
   React.ElementRef<typeof ProgressPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>
 >(({ className, value, max = 100, ...props }, ref) => {
+  const safeMax = typeof max === "number" && Number.isFinite(max) && max > 0 ? max : 100;
   const isValid =
-    typeof value === "number" && Number.isFinite(value) && value >= 0 && value <= max;
-  const percent = isValid ? (value / max) * 100 : null;
+    typeof value === "number" && Number.isFinite(value) && value >= 0 && value <= safeMax;
+  const percent = isValid ? (value / safeMax) * 100 : null;
   return (
     <ProgressPrimitive.Root
       ref={ref}
-      className={cn(
-        "relative h-2 w-full overflow-hidden rounded-full bg-neutral-100 dark:bg-[#2a2d3e]",
-        className,
-      )}
+      className={cn("relative h-2 w-full overflow-hidden rounded-full bg-muted", className)}
       value={isValid ? value : null}
-      max={max}
+      max={safeMax}
       {...props}
     >
       <ProgressPrimitive.Indicator
         data-progress-indicator
-        className="h-full w-full flex-1 bg-blue-500 transition-transform dark:bg-[#3d7eff]"
+        className="h-full w-full flex-1 bg-primary transition-transform"
         style={{ transform: percent !== null ? `translateX(-${100 - percent}%)` : undefined }}
       />
     </ProgressPrimitive.Root>

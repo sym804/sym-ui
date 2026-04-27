@@ -43,33 +43,48 @@ export function DataTable<TData, TValue>({
 
   return (
     <div
-      className={cn(
-        "w-full overflow-x-auto rounded-md border border-neutral-100 bg-white",
-        "dark:border-[#2a2d3e] dark:bg-[#1e222d]",
-        className,
-      )}
+      className={cn("w-full overflow-x-auto rounded-md border border-border bg-surface text-foreground", className)}
     >
       <table className="w-full caption-bottom text-sm">
-        <thead className="border-b border-neutral-100 bg-neutral-50 dark:border-[#2a2d3e] dark:bg-[#262a36]">
+        <thead className="border-b border-border bg-muted">
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 const canSort = enableSorting && header.column.getCanSort();
+                const sortDir = header.column.getIsSorted();
+                const ariaSort: "ascending" | "descending" | "none" | undefined = canSort
+                  ? sortDir === "asc"
+                    ? "ascending"
+                    : sortDir === "desc"
+                      ? "descending"
+                      : "none"
+                  : undefined;
+                const sortHandler = header.column.getToggleSortingHandler();
                 return (
                   <th
                     key={header.id}
-                    onClick={canSort ? header.column.getToggleSortingHandler() : undefined}
-                    className={cn(
-                      "h-10 px-4 text-left align-middle font-medium text-neutral-500 dark:text-[#787b86]",
-                      canSort && "cursor-pointer select-none",
-                    )}
+                    scope="col"
+                    aria-sort={ariaSort}
+                    className="h-10 px-4 text-left align-middle font-medium text-muted-foreground"
                   >
-                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                    {canSort ? (
-                      <span className="ml-1 opacity-70">
-                        {header.column.getIsSorted() === "asc" ? "▲" : header.column.getIsSorted() === "desc" ? "▼" : ""}
-                      </span>
-                    ) : null}
+                    {header.isPlaceholder ? null : canSort ? (
+                      <button
+                        type="button"
+                        onClick={sortHandler}
+                        className={cn(
+                          "inline-flex items-center gap-1 -mx-1 rounded-sm px-1 py-0.5",
+                          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background",
+                          "hover:text-foreground",
+                        )}
+                      >
+                        <span>{flexRender(header.column.columnDef.header, header.getContext())}</span>
+                        <span aria-hidden className="opacity-70">
+                          {sortDir === "asc" ? "▲" : sortDir === "desc" ? "▼" : "↕"}
+                        </span>
+                      </button>
+                    ) : (
+                      flexRender(header.column.columnDef.header, header.getContext())
+                    )}
                   </th>
                 );
               })}
@@ -79,10 +94,7 @@ export function DataTable<TData, TValue>({
         <tbody>
           {table.getRowModel().rows.length === 0 ? (
             <tr>
-              <td
-                colSpan={columns.length}
-                className="h-24 text-center text-neutral-500 dark:text-[#787b86]"
-              >
+              <td colSpan={columns.length} className="h-24 text-center text-muted-foreground">
                 {emptyText}
               </td>
             </tr>
@@ -90,10 +102,10 @@ export function DataTable<TData, TValue>({
             table.getRowModel().rows.map((row) => (
               <tr
                 key={row.id}
-                className="border-b border-neutral-100 transition-colors hover:bg-neutral-50 dark:border-[#2a2d3e] dark:hover:bg-[#262a36]"
+                className="border-b border-border transition-colors hover:bg-muted"
               >
                 {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="p-4 align-middle text-neutral-900 dark:text-[#d1d4dc]">
+                  <td key={cell.id} className="p-4 align-middle text-foreground">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}

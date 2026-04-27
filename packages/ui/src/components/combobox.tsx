@@ -29,6 +29,7 @@ export interface ComboboxProps {
   onValueChange?: (value: string) => void;
   placeholder?: string;
   searchPlaceholder?: string;
+  searchAriaLabel?: string;
   emptyText?: string;
   className?: string;
   disabled?: boolean;
@@ -42,6 +43,7 @@ export const Combobox = React.forwardRef<HTMLButtonElement, ComboboxProps>(
       onValueChange,
       placeholder = "Select...",
       searchPlaceholder = "Search...",
+      searchAriaLabel,
       emptyText = "No results",
       className,
       disabled,
@@ -69,7 +71,7 @@ export const Combobox = React.forwardRef<HTMLButtonElement, ComboboxProps>(
         </PopoverTrigger>
         <PopoverContent className="w-[220px] p-0">
           <Command>
-            <CommandInput placeholder={searchPlaceholder} />
+            <CommandInput placeholder={searchPlaceholder} aria-label={searchAriaLabel ?? searchPlaceholder} />
             <CommandList>
               <CommandEmpty>{emptyText}</CommandEmpty>
               <CommandGroup>

@@ -4,11 +4,38 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        border: "hsl(var(--border) / <alpha-value>)",
+        input: "hsl(var(--input) / <alpha-value>)",
+        ring: "hsl(var(--ring) / <alpha-value>)",
+        background: "hsl(var(--background) / <alpha-value>)",
+        foreground: "hsl(var(--foreground) / <alpha-value>)",
+        surface: {
+          DEFAULT: "hsl(var(--surface) / <alpha-value>)",
+          elevated: "hsl(var(--surface-elevated) / <alpha-value>)",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted) / <alpha-value>)",
+          foreground: "hsl(var(--muted-foreground) / <alpha-value>)",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent) / <alpha-value>)",
+          foreground: "hsl(var(--accent-foreground) / <alpha-value>)",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover) / <alpha-value>)",
+          foreground: "hsl(var(--popover-foreground) / <alpha-value>)",
+        },
+        overlay: "hsl(var(--overlay) / <alpha-value>)",
         primary: {
+          DEFAULT: "hsl(var(--primary) / <alpha-value>)",
+          foreground: "hsl(var(--primary-foreground) / <alpha-value>)",
           50: "#eff6ff",  100: "#dbeafe", 200: "#bfdbfe", 300: "#93c5fd",
           400: "#60a5fa", 500: "#3b82f6", 600: "#2563eb", 700: "#1d4ed8",
           800: "#1e40af", 900: "#1e3a8a", 950: "#172554",
-          DEFAULT: "#3b82f6",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive) / <alpha-value>)",
+          foreground: "hsl(var(--destructive-foreground) / <alpha-value>)",
         },
         neutral: {
           50: "#fafaf9",  100: "#f5f4f2", 200: "#e7e5e1", 300: "#d3d0ca",

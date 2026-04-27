@@ -24,14 +24,14 @@ export const ToastViewport = React.forwardRef<
 ToastViewport.displayName = ToastPrimitive.Viewport.displayName;
 
 const toastVariants = cva(
-  "group pointer-events-auto relative flex w-full items-start gap-3 rounded-md border p-4 shadow-lg",
+  "group pointer-events-auto relative flex w-full items-start gap-3 rounded-md border p-4 bg-popover text-popover-foreground shadow-lg",
   {
     variants: {
       variant: {
-        success: "border-success/30 bg-white dark:bg-[#1e222d]",
-        danger: "border-danger/30 bg-white dark:bg-[#1e222d]",
-        info: "border-info/30 bg-white dark:bg-[#1e222d]",
-        warning: "border-warning/30 bg-white dark:bg-[#1e222d]",
+        success: "border-success/30",
+        danger: "border-danger/30",
+        info: "border-info/30",
+        warning: "border-warning/30",
       },
     },
     defaultVariants: { variant: "success" },
@@ -66,7 +66,7 @@ export const ToastDescription = React.forwardRef<
   React.ElementRef<typeof ToastPrimitive.Description>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitive.Description>
 >(({ className, ...props }, ref) => (
-  <ToastPrimitive.Description ref={ref} className={cn("text-xs text-neutral-500 dark:text-[#787b86]", className)} {...props} />
+  <ToastPrimitive.Description ref={ref} className={cn("text-xs text-muted-foreground", className)} {...props} />
 ));
 ToastDescription.displayName = ToastPrimitive.Description.displayName;
 
