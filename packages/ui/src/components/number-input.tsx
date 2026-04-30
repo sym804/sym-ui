@@ -4,7 +4,8 @@
  * dependencies: []
  * internalDeps: ["utils", "button", "input"]
  *
- * 접근성: 증감 버튼은 aria-label 로 의도를 노출, role="spinbutton" 의 native 동작은 input[type=number] 에 위임.
+ * 접근성: 증감 버튼은 aria-label 로 의도를 노출. native input[type=number] 가 spinbutton
+ * 동작을 담당한다. value 가 비어있을 때는 undefined 로 일관 (null 은 사용하지 않음).
  */
 import * as React from "react";
 import { cn } from "../lib/utils";
@@ -15,7 +16,7 @@ export interface NumberInputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "value" | "defaultValue" | "onChange" | "type"> {
   value?: number;
   defaultValue?: number;
-  onChange?: (value: number | null) => void;
+  onChange?: (value: number | undefined) => void;
   min?: number;
   max?: number;
   step?: number;
@@ -47,12 +48,12 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
     },
     ref,
   ) => {
-    const [internal, setInternal] = React.useState<number | null>(defaultValue ?? null);
+    const [internal, setInternal] = React.useState<number | undefined>(defaultValue);
     const isControlled = value !== undefined;
-    const current = isControlled ? value ?? null : internal;
+    const current = isControlled ? value : internal;
 
     const commit = React.useCallback(
-      (next: number | null) => {
+      (next: number | undefined) => {
         if (!isControlled) setInternal(next);
         onChange?.(next);
       },
@@ -88,7 +89,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
           disabled={disabled}
           onChange={(e) => {
             const raw = e.target.value;
-            if (raw === "") return commit(null);
+            if (raw === "") return commit(undefined);
             const parsed = Number(raw);
             if (Number.isNaN(parsed)) return;
             commit(clamp(parsed, min, max));

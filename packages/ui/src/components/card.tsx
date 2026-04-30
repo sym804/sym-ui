@@ -6,6 +6,10 @@
  *
  * asChild 사용 시 단일 자식 요소를 받아 그 요소가 Card 의 클래스/속성을 흡수합니다.
  * Link 로 감쌀 때 유용합니다 (e.g. <Card asChild><a href="...">...</a></Card>).
+ *
+ * caveat: ref 타입은 HTMLDivElement 로 고정되어 있으므로 asChild 로 다른 element
+ * (a, button 등) 를 넘길 때 ref 를 보유하려면 사용자 측에서 해당 element 의 ref 타입을
+ * 직접 선언하고 cast 하세요. 이는 shadcn/ui 와 동일한 약속입니다.
  */
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";

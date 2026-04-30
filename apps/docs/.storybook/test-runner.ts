@@ -21,7 +21,9 @@ const config: TestRunnerConfig = {
       axeOptions: {
         runOnly: {
           type: "tag",
-          values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"],
+          // WCAG 2.0/2.1/2.2 의 A + AA 까지 자동 검증. best-practice 는 noise 가
+          // 많아 우선 제외 (필요 시 allowlist 방식으로 단계 도입).
+          values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"],
         },
       },
     });

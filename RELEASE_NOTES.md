@@ -4,8 +4,113 @@
 
 | 패키지 | 현재 버전 | 직전 버전 | 릴리즈 일자 |
 |--------|-----------|-----------|-------------|
-| @sym/ui | 0.2.0 | 0.1.0 | 2026-04-30 |
-| @sym/ui-cli | 0.2.0 | 0.1.0 | 2026-04-30 |
+| @sym/ui | 0.2.1 | 0.2.0 | 2026-04-30 |
+| @sym/ui-cli | 0.2.1 | 0.2.0 | 2026-04-30 |
+
+---
+
+## v0.2.1 - 2026-04-30
+
+v0.2.0 직후 Codex 동기 교차 검증에서 발견된 17건 (Major 11 + Minor 6) 을 일괄 해소.
+릴리즈 직후 발견된 회귀가 아니라, 기능적 동작은 OK 였지만 안전성/타입/접근성/코너
+케이스에서 보강이 필요한 항목들. v0.2.0 의 핵심 가치는 유지하면서 패치 레벨로 보정.
+
+### Major (11건)
+
+- **CLI add: 누락 의존 시 무조건 abort** (backend) - 이전엔 missing dep 발견 후에도
+  부모 컴포넌트가 계속 ordered 에 push 되어 깨진 상태로 설치될 수 있었음. 수정:
+  missing.length > 0 이면 즉시 process.exit(1). registry 오타 가드.
+  (packages/cli/src/commands/add.ts)
+
+- **CLI init: globals.css 토큰 검사 정밀화** (backend) - 이전엔 `includes("--background")`
+  로만 검사해 주석이나 `--background-color` 같은 다른 이름에도 반응해 주입을 잘못
+  스킵할 수 있었음. 수정: `(^|[;{]\s*)--background\s*:` 정규식으로 실제 custom property
+  선언만 매칭. (packages/cli/src/commands/init.ts)
+
+- **CLI init: Tailwind 지시문 중복 회피** (backend) - 기존 globals.css 에 이미
+  `@tailwind base` 가 있을 때 sym-ui template 전체를 prepend 하면 지시문이 중복.
+  수정: `extractTokenLayer()` 로 `@layer base { ... }` 블록만 추출, 지시문 존재 시
+  토큰 layer 만 주입. (packages/cli/src/commands/init.ts)
+
+- **CLI init: presets 가 여러 군데일 때 자동 패치 보류** (backend) - 단일 regex 가 첫
+  매치만 잡아 중첩 객체 안의 `presets:` 까지 잘못 패치할 위험. 수정: 매치 카운트가
+  2 이상이면 `manual-needed-multiple-presets` 로 폴백, 명확한 안내 메시지 출력.
+  (packages/cli/src/commands/init.ts)
+
+- **CLI init: .js 파일이 ESM (type:module) 일 때 require 삽입 회피** (backend) -
+  package.json 의 `"type": "module"` 인 프로젝트에서 `tailwind.config.js` 가 ESM 인데
+  CommonJS `require()` 를 자동 삽입하면 런타임 폭발. 수정: `detectPackageType()` 로
+  package type 감지 후 `.js + module` 조합은 `manual-needed-esm-js` 로 폴백.
+  (packages/cli/src/commands/init.ts)
+
+- **Stepper: Fragment / 조건부 children flatten** (frontend) - 이전 React.Children.map
+  + cloneElement 가 Fragment 안의 StepperItem 에는 index 를 부여하지 못했음. 수정:
+  `flattenChildren()` 으로 Fragment 를 재귀적으로 펼친 뒤 displayName 기반으로
+  StepperItem 만 필터해 인덱스 부여. (packages/ui/src/components/stepper.tsx)
+
+- **FileUpload: button-in-button 중첩 제거** (frontend) - 외곽 div role="button" 안에
+  실제 native Button 이 있어 키보드 진입점이 두 개 + a11y 충돌 가능. 수정: 내부 어포던스를
+  `span` + `buttonVariants` 클래스로 변경, `aria-hidden + pointer-events-none` 으로 시각용
+  표시만 유지. (packages/ui/src/components/file-upload.tsx)
+
+- **Slider: thumbAriaLabels prop 추가** (frontend) - 다중 thumb 모드에서 thumb 별
+  라벨을 부여할 API 부재였음. 수정: `thumbAriaLabels?: string[]` 노출, Thumb 렌더 시
+  `aria-label={thumbAriaLabels?.[i]}`. (packages/ui/src/components/slider.tsx)
+
+- **Alert: AlertDescription ref 타입 정정** (frontend) - 실제 렌더는 `<div>` 인데 ref
+  타입은 `HTMLParagraphElement` 였음. 수정: `HTMLDivElement` 로 일관. 사용처에서 ref
+  를 사용 시 발생하던 타입 미스매치 해소. (packages/ui/src/components/alert.tsx)
+
+- **Card / Badge asChild caveat 명시** (frontend) - `asChild` 사용 시 자식 요소 (a,
+  button, NavLink 등) 와 ref 타입 (HTMLDivElement / HTMLSpanElement 고정) 의 미스매치
+  가능성을 JSDoc 에 명시. shadcn/ui 와 동일한 약속. (packages/ui/src/components/card.tsx,
+  badge.tsx)
+
+- **add.ts 알고리즘 코멘트 정정 + missing 중복 제거** (backend) - "BFS" 표기를
+  "DFS post-order" 로 정정, missing 을 Set 으로 모아 중복 출력 방지.
+  (packages/cli/src/commands/add.ts)
+
+### Minor (6건)
+
+- **Pagination Ellipsis: 부모 aria-hidden 분리** (frontend) - 이전엔 wrapper 자체에
+  aria-hidden 이 걸려 sr-only 텍스트가 함께 숨겨졌음. 수정: 시각용 글리프만 aria-hidden,
+  sr-only "More pages" 는 그대로 노출. (packages/ui/src/components/pagination.tsx)
+
+- **Breadcrumb 현재 페이지 role 정정** (frontend) - 이전엔 `role="link" aria-disabled="true"`
+  로 비활성 링크처럼 노출. 수정: span + `aria-current="page"` 만으로 의미 전달.
+  (packages/ui/src/components/breadcrumb.tsx)
+
+- **NumberInput onChange 타입 일관화: null → undefined** (frontend) - 이전엔 onChange
+  가 number | null 을 내보내지만 value 는 number | undefined 만 받아 controlled 사용 시
+  타입 변환 필요했음. 수정: 양쪽 모두 number | undefined 로 통일.
+  (packages/ui/src/components/number-input.tsx, apps/docs/stories/components/number-input.stories.tsx)
+
+- **a11y test-runner: WCAG 2.2 AA 추가** (etc) - axe 의 runOnly 태그에 `wcag22aa`
+  포함. best-practice 는 noise 가 많아 우선 제외 (필요 시 단계적 도입).
+  (apps/docs/.storybook/test-runner.ts)
+
+- **motion 토큰 의도 주석 보강** (frontend) - easing 곡선이 Material 2 + Tailwind
+  호환 의도임을 명시. M3 standard 는 본 토큰의 emphasized 와 매핑됨을 안내. 사용자가
+  M3 가 필요하면 preset override 로 가능. (packages/ui/src/tokens/motion.ts)
+
+- **CLI 패치 결과 메시지 세분화** (backend) - `manual-needed` 를 esm-js / multiple-presets
+  / 일반 으로 분리해 사용자가 원인을 즉시 파악할 수 있도록.
+  (packages/cli/src/commands/init.ts)
+
+### 검증 결과
+
+- **로컬**: typecheck (@sym/ui, @sym/ui-cli, docs) ✅, lint (3종) ✅,
+  test 37 files / 79 tests ✅, @sym/ui-cli build ✅, registry:build (36 + globalsCss) ✅
+- **Codex 동기 교차 검증 (v0.2.0 검토 결과 대상)**: 7개 영역 (internalDeps / globals.css
+  주입 / preset patch / 모션 토큰 / a11y test-runner / 신규 컴포넌트 a11y / 타입 안전성)
+  에서 17건 도출 → 본 v0.2.1 에서 전부 해소
+
+### 호환성
+
+- 기능적으로 v0.2.0 과 호환. NumberInput onChange 시그니처가 `(number | null) => void`
+  → `(number | undefined) => void` 로 변경되었으나 v0.2.0 신규 컴포넌트라 외부 영향 없음.
+- Slider 에 `thumbAriaLabels` 옵션 추가 (없으면 기존 동작 그대로).
+- CLI 의 manual-needed 메시지가 세분화되었으나 동작은 동일.
 
 ---
 

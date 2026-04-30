@@ -25,19 +25,53 @@ const PRESET_MANUAL_HINT = [
   `// export default { presets: [preset], ... }`,
 ].join("\n");
 
+// 토큰 변수가 실제로 정의되어 있는지 (주석이나 --background-color 같은 다른 이름이 아닌)
+// 검사하는 정규식. CSS custom property 선언은 `;` 또는 `{` 뒤에 오거나 라인 시작.
+const TOKEN_BG_RE = /(^|[;{]\s*)--background\s*:/m;
+const TOKEN_PRIMARY_RE = /(^|[;{]\s*)--primary\s*:/m;
+
 interface PresetPatchResult {
-  reason: "already-present" | "patched-array" | "patched-object" | "manual-needed";
+  reason:
+    | "already-present"
+    | "patched-array"
+    | "patched-object"
+    | "manual-needed"
+    | "manual-needed-esm-js"
+    | "manual-needed-multiple-presets";
 }
 
-async function patchTailwindPreset(twPath: string): Promise<PresetPatchResult> {
+async function detectPackageType(cwd: string): Promise<"module" | "commonjs"> {
+  try {
+    const pkg = await fs.readJson(path.join(cwd, "package.json"));
+    return pkg?.type === "module" ? "module" : "commonjs";
+  } catch {
+    return "commonjs";
+  }
+}
+
+async function patchTailwindPreset(
+  twPath: string,
+  pkgType: "module" | "commonjs",
+): Promise<PresetPatchResult> {
   const src = await fs.readFile(twPath, "utf8");
   if (src.includes("@sym/ui/tailwind.preset")) {
     return { reason: "already-present" };
   }
   const ext = path.extname(twPath);
-  const isCjsLike = ext === ".cjs" || ext === ".js";
 
-  // Strategy 1: 기존 presets 배열에 삽입
+  // .js 가 ESM 패키지면 require 삽입은 위험 → 수동 안내
+  if (ext === ".js" && pkgType === "module") {
+    return { reason: "manual-needed-esm-js" };
+  }
+  const isCjsLike = ext === ".cjs" || (ext === ".js" && pkgType === "commonjs");
+
+  // 다중 presets 발견 시 잘못된 위치를 패치할 수 있어 수동 안내로 폴백
+  const allPresetMatches = src.match(/presets\s*:\s*\[/g);
+  if (allPresetMatches && allPresetMatches.length > 1) {
+    return { reason: "manual-needed-multiple-presets" };
+  }
+
+  // Strategy 1: 단일 presets 배열에 삽입 (cjs/js-as-cjs 한정)
   const arrRe = /presets\s*:\s*\[([\s\S]*?)\]/;
   const arrMatch = src.match(arrRe);
   if (arrMatch && isCjsLike) {
@@ -48,7 +82,7 @@ async function patchTailwindPreset(twPath: string): Promise<PresetPatchResult> {
     return { reason: "patched-array" };
   }
 
-  // Strategy 2: cjs/js module.exports = { 직후에 presets 삽입
+  // Strategy 2: cjs/js-as-cjs 의 module.exports = { 직후에 presets 삽입
   if (isCjsLike) {
     const objRe = /(module\.exports\s*=\s*\{)/;
     const objMatch = src.match(objRe);
@@ -62,8 +96,28 @@ async function patchTailwindPreset(twPath: string): Promise<PresetPatchResult> {
     }
   }
 
-  // ts/mjs 또는 패치 실패: 수동 안내
   return { reason: "manual-needed" };
+}
+
+function extractTokenLayer(globalsCss: string): string | null {
+  // `@layer base { :root {...} .dark {...} html { ... } body { ... } code,kbd,... { ... } }`
+  // 형태에서 base layer 블록만 추출. 단순 균형 매처.
+  const layerStart = globalsCss.indexOf("@layer base {");
+  if (layerStart === -1) return null;
+  let depth = 0;
+  let i = layerStart;
+  while (i < globalsCss.length) {
+    const ch = globalsCss[i];
+    if (ch === "{") depth++;
+    else if (ch === "}") {
+      depth--;
+      if (depth === 0) {
+        return globalsCss.slice(layerStart, i + 1);
+      }
+    }
+    i++;
+  }
+  return null;
 }
 
 export async function initCommand() {
@@ -71,6 +125,7 @@ export async function initCommand() {
   console.log(kleur.bold("sym-ui init"));
 
   const registry = await loadRegistry();
+  const pkgType = await detectPackageType(cwd);
 
   // 1. tailwind.config 체크 + 자동 패치
   const tw = findConfigFile(cwd, [
@@ -83,7 +138,7 @@ export async function initCommand() {
     console.log(kleur.red("tailwind.config 가 없습니다. Tailwind 먼저 설치해주세요."));
     process.exit(1);
   }
-  const presetResult = await patchTailwindPreset(tw);
+  const presetResult = await patchTailwindPreset(tw, pkgType);
   switch (presetResult.reason) {
     case "already-present":
       console.log(kleur.gray(`· ${path.basename(tw)} 에 이미 @sym/ui preset 적용됨`));
@@ -91,6 +146,20 @@ export async function initCommand() {
     case "patched-array":
     case "patched-object":
       console.log(kleur.green(`✓ ${path.basename(tw)} 에 @sym/ui preset 자동 적용`));
+      break;
+    case "manual-needed-esm-js":
+      console.log(
+        kleur.yellow(
+          `! ${path.basename(tw)} 가 ESM (package.json type:module) 모드라 require() 자동 삽입을 보류합니다. 수동 추가:\n${PRESET_MANUAL_HINT}`,
+        ),
+      );
+      break;
+    case "manual-needed-multiple-presets":
+      console.log(
+        kleur.yellow(
+          `! ${path.basename(tw)} 에서 'presets:' 배열이 여러 군데 발견되어 자동 패치를 보류합니다 (오삽입 위험). 수동 추가:\n${PRESET_MANUAL_HINT}`,
+        ),
+      );
       break;
     case "manual-needed":
       console.log(
@@ -125,12 +194,19 @@ export async function initCommand() {
   ]);
   if (globals) {
     const existing = await fs.readFile(globals, "utf8");
-    const hasTokens = existing.includes("--background") && existing.includes("--primary");
-    if (!hasTokens) {
-      await fs.writeFile(globals, `${registry.globalsCss}\n${existing}`);
-      console.log(kleur.green(`✓ ${path.relative(cwd, globals)} 에 sym-ui 토큰 + tailwind 지시문 주입`));
-    } else {
+    const hasTokens = TOKEN_BG_RE.test(existing) && TOKEN_PRIMARY_RE.test(existing);
+    if (hasTokens) {
       console.log(kleur.gray(`· ${path.relative(cwd, globals)} 에 토큰이 이미 존재 (스킵)`));
+    } else {
+      // 기존에 @tailwind 지시문이 있으면 토큰 layer 만 주입 (지시문 중복 회피)
+      const hasTailwindDirective = /@tailwind\s+(base|components|utilities)/i.test(existing);
+      const tokenLayer = extractTokenLayer(registry.globalsCss);
+      const cssToInject = hasTailwindDirective && tokenLayer ? tokenLayer + "\n" : registry.globalsCss;
+      await fs.writeFile(globals, `${cssToInject}\n${existing}`);
+      const what = hasTailwindDirective && tokenLayer
+        ? "토큰 layer 만"
+        : "tailwind 지시문 + 토큰";
+      console.log(kleur.green(`✓ ${path.relative(cwd, globals)} 에 sym-ui ${what} 주입`));
     }
   } else {
     console.log(kleur.yellow("! globals.css 를 찾지 못했습니다. 프로젝트 글로벌 CSS 상단에 다음을 수동 추가해주세요:"));

@@ -8,27 +8,32 @@ import { installPackages, InstallError } from "../utils/runner.js";
 
 const SKIP_INTERNAL_DEPS = new Set(["utils"]);
 
+/**
+ * 요청한 컴포넌트 이름들의 internalDeps 그래프를 DFS post-order 로 펼쳐 ordered list 반환.
+ * dep-first 순서라 부모보다 자식이 먼저 ordered 에 들어가 설치 순서가 안전하다.
+ * registry 에 없는 이름은 missing 으로 모인다 (호출 측에서 abort 결정).
+ */
 export function resolveDependencyClosure(
   requested: string[],
   byName: Map<string, RegistryEntry>,
 ): { ordered: RegistryEntry[]; missing: string[] } {
   const seen = new Set<string>();
   const ordered: RegistryEntry[] = [];
-  const missing: string[] = [];
+  const missing = new Set<string>();
   function visit(name: string) {
     if (SKIP_INTERNAL_DEPS.has(name)) return;
     if (seen.has(name)) return;
     seen.add(name);
     const entry = byName.get(name);
     if (!entry) {
-      missing.push(name);
+      missing.add(name);
       return;
     }
     for (const dep of entry.internalDeps ?? []) visit(dep);
     ordered.push(entry);
   }
   for (const name of requested) visit(name);
-  return { ordered, missing };
+  return { ordered, missing: Array.from(missing) };
 }
 
 export async function addCommand(components: string[], opts: { yes?: boolean }) {
@@ -58,8 +63,12 @@ export async function addCommand(components: string[], opts: { yes?: boolean }) 
   }
 
   const { ordered, missing } = resolveDependencyClosure(components, byName);
-  for (const m of missing) {
-    console.log(kleur.red(`✗ ${m}: registry 에 없음`));
+  if (missing.length > 0) {
+    for (const m of missing) {
+      console.log(kleur.red(`✗ ${m}: registry 에 없음`));
+    }
+    console.log(kleur.red("의존 컴포넌트 누락으로 설치를 중단합니다 (registry 동기화 또는 컴포넌트 이름을 확인하세요)."));
+    process.exit(1);
   }
   if (ordered.length === 0) {
     console.log(kleur.yellow("설치할 컴포넌트가 없습니다."));

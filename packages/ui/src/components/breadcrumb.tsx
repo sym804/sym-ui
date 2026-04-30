@@ -55,11 +55,11 @@ export const BreadcrumbLink = React.forwardRef<HTMLAnchorElement, BreadcrumbLink
 BreadcrumbLink.displayName = "BreadcrumbLink";
 
 export const BreadcrumbPage = React.forwardRef<HTMLSpanElement, React.HTMLAttributes<HTMLSpanElement>>(
+  // 현재 페이지는 링크가 아니므로 role="link"/aria-disabled 를 부여하지 않는다.
+  // 단순 span + aria-current="page" 만으로 스크린 리더가 현재 위치를 인지한다.
   ({ className, ...props }, ref) => (
     <span
       ref={ref}
-      role="link"
-      aria-disabled="true"
       aria-current="page"
       className={cn("font-medium text-foreground", className)}
       {...props}

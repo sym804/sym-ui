@@ -5,11 +5,12 @@
  * internalDeps: ["utils", "button"]
  *
  * 접근성: 드롭존이 button role 로 노출되어 키보드 (Enter/Space) 로 파일 선택 가능.
- * 시각적 어포던스 + 스크린 리더 안내 (aria-label, aria-describedby) 둘 다 제공.
+ * 내부 "파일 선택" 어포던스는 시각적 표시일 뿐이라 실제 native button 을 중첩하지 않고
+ * span 으로 렌더한다 (button-in-button 회피, 단일 키보드 진입점 유지).
  */
 import * as React from "react";
 import { cn } from "../lib/utils";
-import { Button } from "./button";
+import { buttonVariants } from "./button";
 
 export interface FileUploadProps {
   className?: string;
@@ -79,9 +80,12 @@ export const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
         >
           <span aria-hidden className="text-2xl text-muted-foreground">⬆</span>
           <span className="font-medium text-foreground">파일을 끌어다 놓거나 클릭하세요</span>
-          <Button type="button" variant="outline" size="sm" disabled={disabled} tabIndex={-1}>
+          <span
+            aria-hidden
+            className={cn(buttonVariants({ variant: "outline", size: "sm" }), "pointer-events-none")}
+          >
             파일 선택
-          </Button>
+          </span>
         </div>
         {hint ? (
           <p id={hintId} className="text-xs text-muted-foreground">

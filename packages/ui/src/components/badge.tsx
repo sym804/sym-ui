@@ -5,6 +5,9 @@
  * internalDeps: ["utils"]
  *
  * asChild 사용 시 NavLink/anchor 등을 Badge 스타일로 감쌀 수 있습니다.
+ *
+ * caveat: ref 타입은 HTMLSpanElement 로 고정. asChild 로 다른 element 를 넘길 때
+ * ref 를 사용하려면 사용자 측에서 cast 하세요 (shadcn/ui 와 동일한 약속).
  */
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";

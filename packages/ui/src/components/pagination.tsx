@@ -86,12 +86,13 @@ export const PaginationNext = React.forwardRef<HTMLButtonElement, PaginationLink
 PaginationNext.displayName = "PaginationNext";
 
 export const PaginationEllipsis = ({ className, ...props }: React.HTMLAttributes<HTMLSpanElement>) => (
+  // 부모 자체에는 aria-hidden 을 두지 않는다. 시각용 글리프만 aria-hidden 으로 숨기고
+  // 스크린 리더용 "More pages" 는 sr-only 로 그대로 노출되도록 분리.
   <span
-    aria-hidden
     className={cn("flex h-9 w-9 items-center justify-center text-muted-foreground", className)}
     {...props}
   >
-    …
+    <span aria-hidden>…</span>
     <span className="sr-only">More pages</span>
   </span>
 );

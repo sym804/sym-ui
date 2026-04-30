@@ -11,8 +11,8 @@ export default meta;
 type Story = StoryObj<typeof NumberInput>;
 
 const Demo = () => {
-  const [value, setValue] = React.useState<number | null>(3);
-  return <NumberInput value={value ?? undefined} onChange={setValue} min={0} max={10} step={1} />;
+  const [value, setValue] = React.useState<number | undefined>(3);
+  return <NumberInput value={value} onChange={setValue} min={0} max={10} step={1} />;
 };
 
 export const Default: Story = { render: () => <Demo /> };
