@@ -20,6 +20,7 @@ import {
   PaginationNext,
   EmptyState,
   Button,
+  Skeleton,
 } from "@sym/ui";
 
 const meta: Meta = {
@@ -29,7 +30,7 @@ const meta: Meta = {
     docs: {
       description: {
         component:
-          "데이터 테이블 + 검색 + 상태 필터 + 페이지네이션 + 빈 상태가 함께 놓이는 리스트 패턴.",
+          "데이터 테이블 + 검색 + 상태 필터 + 페이지네이션 + 빈 상태. Default / Loading / Empty / Mobile.",
       },
     },
   },
@@ -84,9 +85,15 @@ const columns: ColumnDef<Order>[] = [
   { accessorKey: "date", header: "날짜" },
 ];
 
-const Demo = () => {
-  const [query, setQuery] = React.useState("");
-  const [status, setStatus] = React.useState<string>("all");
+interface DemoProps {
+  initialQuery?: string;
+  initialStatus?: string;
+  loading?: boolean;
+}
+
+const Demo = ({ initialQuery = "", initialStatus = "all", loading }: DemoProps) => {
+  const [query, setQuery] = React.useState(initialQuery);
+  const [status, setStatus] = React.useState<string>(initialStatus);
   const [page, setPage] = React.useState(1);
 
   const filtered = SAMPLE.filter((row) => {
@@ -112,11 +119,13 @@ const Demo = () => {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 className="pl-9"
+                disabled={loading}
               />
             </div>
             <Combobox
               value={status}
               onValueChange={setStatus}
+              disabled={loading}
               options={[
                 { value: "all", label: "전체 상태" },
                 { value: "paid", label: "결제 완료" },
@@ -126,7 +135,18 @@ const Demo = () => {
             />
           </div>
 
-          {filtered.length === 0 ? (
+          {loading ? (
+            <div className="space-y-3 rounded-md border border-border p-4">
+              {[0, 1, 2, 3, 4].map((i) => (
+                <div key={i} className="grid grid-cols-5 gap-3">
+                  <Skeleton className="h-4" />
+                  <Skeleton className="h-4 col-span-2" />
+                  <Skeleton className="h-4" />
+                  <Skeleton className="h-4" />
+                </div>
+              ))}
+            </div>
+          ) : filtered.length === 0 ? (
             <EmptyState
               title="조건에 맞는 주문이 없습니다"
               description="검색어와 필터를 조정해 다시 시도해보세요."
@@ -146,7 +166,7 @@ const Demo = () => {
             <DataTable columns={columns} data={filtered} enableSorting />
           )}
 
-          {filtered.length > 0 ? (
+          {!loading && filtered.length > 0 ? (
             <Pagination>
               <PaginationContent>
                 <PaginationItem>
@@ -172,3 +192,25 @@ const Demo = () => {
 };
 
 export const Default: Story = { render: () => <Demo /> };
+
+export const Loading: Story = {
+  parameters: {
+    docs: { description: { story: "데이터 fetch 중. Skeleton 5 줄로 그리드 보존." } },
+  },
+  render: () => <Demo loading />,
+};
+
+export const Empty: Story = {
+  parameters: {
+    docs: { description: { story: "필터/검색으로 0 hit. EmptyState + 필터 초기화 버튼." } },
+  },
+  render: () => <Demo initialQuery="존재하지 않는 고객사" initialStatus="failed" />,
+};
+
+export const Mobile: Story = {
+  parameters: {
+    viewport: { defaultViewport: "mobile1" },
+    docs: { description: { story: "좁은 viewport. 컬럼은 가로 스크롤로 처리, 검색/필터는 세로 스택." } },
+  },
+  render: () => <Demo />,
+};

@@ -1,11 +1,12 @@
 /**
  * @registry-meta
  * name: accordion
- * dependencies: ["@radix-ui/react-accordion"]
+ * dependencies: ["@radix-ui/react-accordion", "lucide-react"]
  * internalDeps: ["utils"]
  */
 import * as React from "react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
+import { ChevronDown } from "lucide-react";
 import { cn } from "../lib/utils";
 
 export const Accordion = AccordionPrimitive.Root;
@@ -33,13 +34,13 @@ export const AccordionTrigger = React.forwardRef<
         "flex flex-1 items-center justify-between py-4 text-sm font-medium",
         "text-foreground transition-all hover:underline",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm",
-        "[&[data-state=open]>span]:rotate-180",
+        "[&[data-state=open]>svg]:rotate-180",
         className,
       )}
       {...props}
     >
       {children}
-      <span aria-hidden className="ml-2 h-4 w-4 shrink-0 transition-transform duration-200">▾</span>
+      <ChevronDown aria-hidden className="ml-2 h-4 w-4 shrink-0 transition-transform duration-200" />
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 ));

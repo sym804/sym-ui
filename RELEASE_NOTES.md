@@ -4,8 +4,64 @@
 
 | 패키지 | 현재 버전 | 직전 버전 | 릴리즈 일자 |
 |--------|-----------|-----------|-------------|
-| @sym/ui | 0.3.0 | 0.2.1 | 2026-04-30 |
-| @sym/ui-cli | 0.3.0 | 0.2.1 | 2026-04-30 |
+| @sym/ui | 0.4.0 | 0.3.0 | 2026-04-30 |
+| @sym/ui-cli | 0.4.0 | 0.3.0 | 2026-04-30 |
+
+---
+
+## v0.4.0 - 2026-04-30
+
+Codex 디자인 재평가 (8.0/10) 의 남은 아쉬움 4건 중 3건 (색상 정체성 추가 강화 제외) 을
+해소. 핵심은 **패턴 스토리에 시나리오 변형 추가** 로, Storybook 에서 단순한 happy path
+뿐 아니라 Loading / Error / Empty / Mobile / Success 같은 실제 운영 상태를 함께 검토할
+수 있도록 확장.
+
+### Major (1건)
+
+- **패턴 스토리 시나리오 확장 (5개 패턴 → 18개 stories)** (etc) - 기존 Default 만 있던
+  5개 패턴 스토리에 Loading / Error / Empty / Mobile / Success / WithSuggestions /
+  Blocked / Completed 등 운영 상태 변형을 추가.
+  - Settings Page: Default / Loading / ErrorState / Mobile
+  - Empty Search Results: Default / Loading / WithSuggestions
+  - File Upload Form: Default / Uploading / ValidationError / Success
+  - DataTable with Filters: Default / Loading / Empty / Mobile
+  - Account Activity: InProgress / Completed / Blocked
+  Skeleton, Alert (info / success / warning / destructive), Progress, Badge 의
+  복합 사용 패턴이 함께 검토 가능.
+  (apps/docs/stories/patterns/*.stories.tsx)
+
+### Minor (3건)
+
+- **brand/Identity.mdx 의 블루 표기를 indigo 로 정정** (etc) - v0.3.0 에서 primary 를
+  indigo 로 바꿨지만 brand 문서가 여전히 "블루 중심", "블루 프라이머리" 로 남아 있던
+  문서 모순 해소. 다크 배경 L>=15% 규칙, 변경 이력도 추가.
+  (apps/docs/stories/brand/Identity.mdx)
+
+- **Accordion 의 ▾ → ChevronDown** (frontend) - v0.3.0 의 lucide 일괄 교체에서 누락된
+  컴포넌트. AccordionTrigger 의 회전 애니메이션 셀렉터도 `>span` 에서 `>svg` 로 변경
+  (lucide 가 svg 로 렌더되므로). dependencies 에 lucide-react 추가.
+  (packages/ui/src/components/accordion.tsx)
+
+- **Checkbox 의 ✓ → Check** (frontend) - v0.3.0 누락. CheckboxPrimitive.Indicator 의
+  자식이 `<Check className="h-3 w-3" />` 로 변경. dependencies 에 lucide-react 추가.
+  (packages/ui/src/components/checkbox.tsx)
+
+### 검증 결과
+
+- **로컬**: typecheck (@sym/ui, @sym/ui-cli, docs) ✅, lint (3종) ✅,
+  test 37 files / 79 tests ✅, @sym/ui-cli build ✅, registry:build (36 + globalsCss) ✅,
+  storybook build (10.18s, 54 stories: 36 컴포넌트 + 18 패턴) ✅
+
+### 호환성
+
+- 컴포넌트 API 변경 없음. Accordion / Checkbox 의 시각적 아이콘만 변경 (텍스트 → SVG).
+- 새 의존성 추가 없음 (lucide-react 는 이미 v0.3.0 에서 도입).
+
+### 의도적 미처리
+
+- **색상 정체성 추가 강화** (indigo + warm gray 조합도 익숙한 SaaS 팔레트라는 평가) 는
+  사용자 취향에 영향이 크고 시각 검토 비용이 높아 v0.4.0 에서는 보류. 향후 별도
+  실험적 brand 변형이 필요할 때 재검토.
 
 ---
 

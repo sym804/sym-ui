@@ -1,11 +1,12 @@
 /**
  * @registry-meta
  * name: checkbox
- * dependencies: ["@radix-ui/react-checkbox"]
+ * dependencies: ["@radix-ui/react-checkbox", "lucide-react"]
  * internalDeps: ["utils"]
  */
 import * as React from "react";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
+import { Check } from "lucide-react";
 import { cn } from "../lib/utils";
 
 export const Checkbox = React.forwardRef<
@@ -24,7 +25,7 @@ export const Checkbox = React.forwardRef<
     {...props}
   >
     <CheckboxPrimitive.Indicator className="flex items-center justify-center text-current">
-      <span aria-hidden="true" className="text-xs leading-none">✓</span>
+      <Check aria-hidden className="h-3 w-3" />
     </CheckboxPrimitive.Indicator>
   </CheckboxPrimitive.Root>
 ));

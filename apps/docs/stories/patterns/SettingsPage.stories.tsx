@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import * as React from "react";
+import { AlertCircle } from "lucide-react";
 import {
   Card,
   CardHeader,
@@ -22,6 +23,10 @@ import {
   Button,
   Separator,
   Badge,
+  Skeleton,
+  Alert,
+  AlertTitle,
+  AlertDescription,
 } from "@sym/ui";
 
 const meta: Meta = {
@@ -31,7 +36,7 @@ const meta: Meta = {
     docs: {
       description: {
         component:
-          "Tabs + Form + Card + Switch + Select 가 함께 놓였을 때의 리듬. 실제 앱의 Settings 페이지 골격.",
+          "Tabs + Form + Card + Switch + Select 가 함께 놓였을 때의 리듬. Default / Loading / Error / Mobile 변형.",
       },
     },
   },
@@ -39,7 +44,12 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj;
 
-const SettingsLayout = () => {
+interface SettingsLayoutProps {
+  loading?: boolean;
+  error?: string;
+}
+
+const SettingsLayout = ({ loading, error }: SettingsLayoutProps) => {
   const [notifyEmail, setNotifyEmail] = React.useState(true);
   const [notifyPush, setNotifyPush] = React.useState(false);
 
@@ -52,6 +62,14 @@ const SettingsLayout = () => {
         </div>
         <Badge variant="primary">Pro</Badge>
       </header>
+
+      {error ? (
+        <Alert variant="destructive">
+          <AlertCircle aria-hidden className="absolute left-4 top-4 h-4 w-4" />
+          <AlertTitle>저장하지 못했습니다</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      ) : null}
 
       <Tabs defaultValue="profile">
         <TabsList>
@@ -67,31 +85,50 @@ const SettingsLayout = () => {
               <CardDescription>다른 사용자에게 보이는 공개 정보입니다.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">이름</Label>
-                <Input id="name" defaultValue="홍길동" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="email">이메일</Label>
-                <Input id="email" type="email" defaultValue="hong@example.com" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="lang">언어</Label>
-                <Select defaultValue="ko">
-                  <SelectTrigger id="lang">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="ko">한국어</SelectItem>
-                    <SelectItem value="en">English</SelectItem>
-                    <SelectItem value="ja">日本語</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+              {loading ? (
+                <>
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-16" />
+                    <Skeleton className="h-10 w-full" />
+                  </div>
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-16" />
+                    <Skeleton className="h-10 w-full" />
+                  </div>
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-16" />
+                    <Skeleton className="h-10 w-full" />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="space-y-2">
+                    <Label htmlFor="name">이름</Label>
+                    <Input id="name" defaultValue="홍길동" disabled={!!error} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email">이메일</Label>
+                    <Input id="email" type="email" defaultValue="hong@example.com" disabled={!!error} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="lang">언어</Label>
+                    <Select defaultValue="ko" disabled={!!error}>
+                      <SelectTrigger id="lang">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="ko">한국어</SelectItem>
+                        <SelectItem value="en">English</SelectItem>
+                        <SelectItem value="ja">日本語</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </>
+              )}
             </CardContent>
             <CardFooter>
-              <Button variant="outline">취소</Button>
-              <Button>저장</Button>
+              <Button variant="outline" disabled={loading}>취소</Button>
+              <Button disabled={loading || !!error}>저장</Button>
             </CardFooter>
           </Card>
         </TabsContent>
@@ -144,3 +181,27 @@ const SettingsLayout = () => {
 };
 
 export const Default: Story = { render: () => <SettingsLayout /> };
+
+export const Loading: Story = {
+  parameters: {
+    docs: { description: { story: "초기 데이터 로딩 중. Skeleton 으로 레이아웃을 보존해 깜빡임 방지." } },
+  },
+  render: () => <SettingsLayout loading />,
+};
+
+export const ErrorState: Story = {
+  parameters: {
+    docs: { description: { story: "저장 실패 시 Alert(destructive) + 입력/액션 비활성." } },
+  },
+  render: () => (
+    <SettingsLayout error="네트워크 연결이 끊어졌습니다. 잠시 후 다시 시도하세요." />
+  ),
+};
+
+export const Mobile: Story = {
+  parameters: {
+    viewport: { defaultViewport: "mobile1" },
+    docs: { description: { story: "좁은 viewport 에서의 카드/탭 폭 변화." } },
+  },
+  render: () => <SettingsLayout />,
+};
