@@ -11,6 +11,7 @@ interface Entry {
 }
 
 const UI_ROOT = path.resolve(process.cwd(), "../ui/src/components");
+const UI_TEMPLATES = path.resolve(process.cwd(), "../ui/templates");
 const OUT = path.resolve(process.cwd(), "registry.json");
 
 function parseMeta(src: string) {
@@ -43,8 +44,12 @@ function main() {
       sourceContent: src,
     };
   });
-  fs.writeFileSync(OUT, JSON.stringify({ components: entries }, null, 2));
-  console.log(`registry.json written with ${entries.length} components`);
+  const globalsCss = fs.readFileSync(path.join(UI_TEMPLATES, "globals.css"), "utf8");
+  fs.writeFileSync(
+    OUT,
+    JSON.stringify({ components: entries, globalsCss }, null, 2),
+  );
+  console.log(`registry.json written with ${entries.length} components + globals.css`);
 }
 
 main();

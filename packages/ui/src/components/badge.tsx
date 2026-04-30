@@ -1,10 +1,13 @@
 /**
  * @registry-meta
  * name: badge
- * dependencies: []
+ * dependencies: ["@radix-ui/react-slot"]
  * internalDeps: ["utils"]
+ *
+ * asChild 사용 시 NavLink/anchor 등을 Badge 스타일로 감쌀 수 있습니다.
  */
 import * as React from "react";
+import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../lib/utils";
 
@@ -27,12 +30,15 @@ const badgeVariants = cva(
 
 export interface BadgeProps
   extends React.HTMLAttributes<HTMLSpanElement>,
-    VariantProps<typeof badgeVariants> {}
+    VariantProps<typeof badgeVariants> {
+  asChild?: boolean;
+}
 
 export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
-  ({ className, variant, ...props }, ref) => (
-    <span ref={ref} className={cn(badgeVariants({ variant, className }))} {...props} />
-  ),
+  ({ className, variant, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : "span";
+    return <Comp ref={ref} className={cn(badgeVariants({ variant, className }))} {...props} />;
+  },
 );
 Badge.displayName = "Badge";
 

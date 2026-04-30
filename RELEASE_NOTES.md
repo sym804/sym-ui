@@ -4,8 +4,97 @@
 
 | 패키지 | 현재 버전 | 직전 버전 | 릴리즈 일자 |
 |--------|-----------|-----------|-------------|
-| @sym/ui | 0.1.0 | 0.0.0 | 2026-04-27 |
-| @sym/ui-cli | 0.1.0 | 0.0.0 | 2026-04-27 |
+| @sym/ui | 0.2.0 | 0.1.0 | 2026-04-30 |
+| @sym/ui-cli | 0.2.0 | 0.1.0 | 2026-04-30 |
+
+---
+
+## v0.2.0 - 2026-04-30
+
+Codex 1차 외부 검토 5건 + Claude 종합 평가에서 도출된 4건의 약점을 일괄 해소. 핵심은
+**CLI 설치 흐름 정상화 (init/add 가 실제로 동작하도록)**, 카탈로그 36개로 확장, 모션 토큰
+도입, Storybook test-runner + axe 기반 a11y 자동 검증 도입, 정체성/스펙 문서 정리.
+
+### Critical (2건)
+
+- **CLI init 이 토큰 CSS 변수와 Tailwind preset 을 주입하지 않던 결함** (backend) -
+  `init.ts:9` 의 `GLOBALS_CSS` 가 폰트 + Tailwind 지시문만 포함하고 `--background`,
+  `--primary` 등 시맨틱 토큰을 누락. 또한 `tailwind.config` 에 preset 자동 패치 없이
+  경고만 출력. 결과적으로 CLI 로 설치한 소비 프로젝트에서 `bg-background`, `bg-primary`
+  등이 정상 렌더링되지 않았음. **수정**: `build-registry.ts` 가 `templates/globals.css`
+  내용을 registry.json 의 `globalsCss` 필드로 임베드 → init 이 그대로 prepend. preset 은
+  `.cjs/.js` 에 한해 regex 기반 자동 patch (presets 배열에 삽입 / module.exports 객체에
+  주입 두 전략), `.ts/.mjs` 는 명확한 수동 안내 출력. (packages/cli/src/commands/init.ts,
+  packages/cli/src/scripts/build-registry.ts, packages/cli/src/utils/registry.ts)
+
+- **CLI add 가 internalDeps 를 따라가지 않던 결함** (backend) - `add.ts:52` 가 요청한
+  컴포넌트 1개만 복사하고 `combobox` (popover/command/button 의존), `form` (label 의존),
+  `date-picker` (calendar/popover/button 의존) 같은 합성 컴포넌트가 컴파일 실패하던
+  상태. **수정**: `resolveDependencyClosure()` BFS 구현으로 internalDeps 그래프를
+  순회하며 ordered list 를 계산해 누락 없이 복사. utils 는 init 이 이미 생성하므로
+  SKIP 셋으로 제외. npm 의존성도 모든 종속 컴포넌트 분을 단일 install 로 묶어 호출.
+  (packages/cli/src/commands/add.ts)
+
+### Major (5건)
+
+- **카탈로그 26개 → 36개 확장** (frontend) - Tier 4 신규: Separator, Alert (status/alert
+  role 자동 분기), Breadcrumb (aria-label="Breadcrumb"), Pagination (aria-current="page"),
+  Slider (Radix, 단일/range thumb 자동), NumberInput (Button + Input 합성), Drawer (Sheet
+  의 bottom 변형 + drag handle), Stepper (ol + aria-current="step"), EmptyState (status
+  region), FileUpload (button role + drag&drop, aria-describedby 힌트). 의존성에
+  @radix-ui/react-separator, @radix-ui/react-slider 추가. (packages/ui/src/components/*,
+  apps/docs/stories/components/*)
+
+- **모션 토큰 도입** (frontend) - duration (instant/fast 150/base 200/slow 300/slower 500)
+  + easing (standard/decelerate/accelerate/emphasized) 토큰 추가. Tailwind preset 의
+  transitionDuration / transitionTimingFunction 으로 노출되어 `duration-fast`,
+  `ease-standard` 클래스로 사용 가능. 이전엔 accordion-down/up 키프레임만 존재했음.
+  (packages/ui/src/tokens/motion.ts, packages/ui/tailwind.preset.cjs)
+
+- **a11y 자동 검증 CI 게이트 추가** (etc) - @storybook/test-runner + axe-playwright 도입.
+  CI 의 a11y job 이 storybook 빌드본을 Headless Chromium 에서 순회하며 모든 stories 의
+  WCAG 2.1 AA 위반을 자동 차단. landmark 단위 룰 (region) 만 stories scope 부적합으로
+  비활성. (apps/docs/.storybook/test-runner.ts, apps/docs/package.json,
+  .github/workflows/ci.yml)
+
+- **README 정체성 명시 + 36개 카탈로그 + 모션 토큰 + a11y 자동화 반영** (etc) -
+  Codex 5번 지적 (스펙/구현 불일치) 의 일부. shadcn 식 소스 복사 모델임을 README 상단에
+  명시. @sym/ui 는 private:true 로 npm 미배포, @sym/ui-cli 만 배포한다는 분리 명확화.
+  (README.md)
+
+- **설계 스펙 문서를 Draft / Future Plan 으로 명시** (etc) - Codex 5번 지적의 잔여.
+  Button loading prop, Label hint, --color-primary-500 명명, Chromatic, Husky 등이
+  현재 구현에 없음을 표로 명시. 향후 작업 체크리스트로 보존.
+  (docs/superpowers/specs/2026-04-24-design-system-design.md)
+
+### Minor (3건)
+
+- **asChild 패턴 일관성: Card, Badge 에 추가** (frontend) - 기존 Button 만 지원하던
+  asChild 를 Card (Link 로 감쌀 때) 와 Badge (NavLink 등) 에도 노출. Trigger 계열은
+  Radix Primitive 의 asChild 가 자동 통과되므로 별도 작업 불필요. (card.tsx, badge.tsx)
+
+- **CLI tailwind.config 후보에 .cjs 추가** (backend) - findConfigFile 후보가
+  `.ts/.js/.mjs` 만 검사하던 누락 보강. (packages/cli/src/commands/init.ts)
+
+- **Slider 다중 thumb 자동 렌더** (frontend) - 초기 구현이 thumb 1개만 렌더해 range
+  모드에서 thumb 갯수가 어긋남. defaultValue/value 의 length 만큼 동적 렌더로 수정.
+  (packages/ui/src/components/slider.tsx)
+
+### 검증 결과
+
+- **로컬**: typecheck (@sym/ui, @sym/ui-cli, docs) ✅, lint (@sym/ui, @sym/ui-cli, docs) ✅,
+  test 37 files / 79 tests ✅, @sym/ui-cli build ✅, registry:build (36 components +
+  globalsCss) ✅
+- **Codex 1차 외부 검토 5건**: CLI init 토큰 누락, CLI add internalDeps 누락, init preset
+  자동 패치 부재, a11y 자동화 부재, 스펙/구현 불일치 → 5건 모두 본 릴리즈에서 해소
+- **Codex v0.2.0 교차 검증**: 디스패치 후 결과는 v0.2.x patch 또는 별도 섹션에 후속 기록
+
+### 호환성
+
+- 기존 26개 컴포넌트 API 변경 없음. Card, Badge 에 `asChild?: boolean` prop 추가 (옵션).
+- registry.json 스키마 변경 (`{ components: ... }` → `{ components: ..., globalsCss: ... }`).
+  CLI 0.1.x 와는 호환되지 않으므로 CLI 도 함께 0.2.0 으로 bump.
+- @sym/ui 는 여전히 private:true (배포되지 않음). @sym/ui-cli 만 npm 배포 대상.
 
 ---
 

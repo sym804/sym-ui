@@ -1,20 +1,31 @@
 /**
  * @registry-meta
  * name: card
- * dependencies: []
+ * dependencies: ["@radix-ui/react-slot"]
  * internalDeps: ["utils"]
+ *
+ * asChild 사용 시 단일 자식 요소를 받아 그 요소가 Card 의 클래스/속성을 흡수합니다.
+ * Link 로 감쌀 때 유용합니다 (e.g. <Card asChild><a href="...">...</a></Card>).
  */
 import * as React from "react";
+import { Slot } from "@radix-ui/react-slot";
 import { cn } from "../lib/utils";
 
-export const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn("rounded-md border border-border bg-surface p-5 text-foreground shadow-sm", className)}
-      {...props}
-    />
-  ),
+export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  asChild?: boolean;
+}
+
+export const Card = React.forwardRef<HTMLDivElement, CardProps>(
+  ({ className, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : "div";
+    return (
+      <Comp
+        ref={ref}
+        className={cn("rounded-md border border-border bg-surface p-5 text-foreground shadow-sm", className)}
+        {...props}
+      />
+    );
+  },
 );
 Card.displayName = "Card";
 

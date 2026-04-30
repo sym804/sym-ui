@@ -61,6 +61,19 @@ module.exports = {
         lg: "0 12px 24px rgba(0,0,0,0.06), 0 4px 8px rgba(0,0,0,0.06)",
         xl: "0 20px 40px rgba(0,0,0,0.08), 0 8px 16px rgba(0,0,0,0.06)",
       },
+      transitionDuration: {
+        instant: "0ms",
+        fast: "150ms",
+        base: "200ms",
+        slow: "300ms",
+        slower: "500ms",
+      },
+      transitionTimingFunction: {
+        standard: "cubic-bezier(0.4, 0, 0.2, 1)",
+        decelerate: "cubic-bezier(0, 0, 0.2, 1)",
+        accelerate: "cubic-bezier(0.4, 0, 1, 1)",
+        emphasized: "cubic-bezier(0.2, 0, 0, 1)",
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },

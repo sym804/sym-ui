@@ -7,7 +7,9 @@
     "dev": "storybook dev -p 6006",
     "build": "storybook build -o storybook-static",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test:a11y": "test-storybook --url http://127.0.0.1:6006",
+    "test:a11y:ci": "concurrently -k -s first -n SB,A11Y \"http-server storybook-static --port 6006 -s\" \"wait-on http://127.0.0.1:6006 && test-storybook --url http://127.0.0.1:6006\""
   },
   "dependencies": {
     "@sym/ui": "workspace:*",
@@ -22,7 +24,12 @@
     "@storybook/blocks": "^8.3.0",
     "@storybook/react": "^8.3.0",
     "@storybook/react-vite": "^8.3.0",
+    "@storybook/test-runner": "^0.19.1",
     "@tanstack/react-table": "^8.21.3",
+    "axe-playwright": "^2.0.3",
+    "concurrently": "^9.0.1",
+    "http-server": "^14.1.1",
+    "wait-on": "^8.0.1",
     "@types/react": "^18.3.10",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",

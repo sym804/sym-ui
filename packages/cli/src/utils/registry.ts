@@ -11,10 +11,15 @@ export interface RegistryEntry {
   sourceContent: string;
 }
 
+export interface Registry {
+  components: RegistryEntry[];
+  globalsCss: string;
+}
+
 const here = path.dirname(fileURLToPath(import.meta.url));
 const REGISTRY_PATH = path.resolve(here, "..", "registry.json");
 
-export async function loadRegistry(): Promise<RegistryEntry[]> {
-  const json = await fs.readJson(REGISTRY_PATH);
-  return json.components as RegistryEntry[];
+export async function loadRegistry(): Promise<Registry> {
+  const json = (await fs.readJson(REGISTRY_PATH)) as Registry;
+  return json;
 }

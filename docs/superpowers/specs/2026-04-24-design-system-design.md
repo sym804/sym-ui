@@ -2,7 +2,23 @@
 
 - 작성일: 2026-04-24
 - 작성자: ymseo (sym804@naver.com)
-- 상태: Draft (브레인스토밍 단계 확정본)
+- 상태: **Draft / Future Plan** (브레인스토밍 단계 확정본). 본 문서는 v0.0.0 → v0.1.0
+  착수 전 작성된 초안이며, 일부 항목은 현 구현과 차이가 있다 (예: Button `loading` prop,
+  Label `hint` prop, `--color-primary-500` 명명, Chromatic, Husky/lint-staged 등).
+  **현재 구현 현황은 [README.md](../../../README.md) 와
+  [RELEASE_NOTES.md](../../../RELEASE_NOTES.md) 를 참조** 하라. 본 문서는 향후 개선 방향과
+  설계 의도를 보존하기 위한 기록물로 유지한다.
+
+### 본 문서와 현재 구현 차이 (v0.2.0 기준)
+
+| 스펙 항목 | 스펙 | 현재 |
+|----------|------|------|
+| Button `loading` prop | 있음 | 미구현 (v0.3 후보) |
+| Label `hint` slot | 있음 | 미구현. Form 의 `FormDescription` 으로 대체 |
+| 토큰 명명 | `--color-primary-500` | `--primary` (시맨틱) + `primary-500` (Tailwind 스케일) |
+| 시각 회귀 | Chromatic | 미도입. 대신 Storybook test-runner + axe (a11y) 만 자동화 |
+| Pre-commit | Husky + lint-staged | 미도입 (CI 가 lint/typecheck/test 전부 게이트) |
+| 컴포넌트 수 | 핵심 8종 + 확장 | 36개 (v0.2.0) |
 
 ## 1. 개요
 
