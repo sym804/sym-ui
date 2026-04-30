@@ -1,23 +1,33 @@
 name: Visual Baseline (linux)
 
 # 시각 회귀 baseline 의 linux/jammy 버전을 생성/갱신한다. CI 의 `visual` job 이 사용하는
-# baseline 과 동일 환경. workflow_dispatch 로 수동 트리거 후, 결과물 (smoke.spec.ts-snapshots
-# 디렉토리의 *-chromium-linux.png) 을 artifact 로 업로드한다.
+# baseline 과 동일 환경. workflow_dispatch 로 수동 트리거하면:
+#   1. ubuntu-latest + playwright/jammy 에서 visual:update 실행
+#   2. 변경된 *-chromium-linux.png 를 main 에 자동 commit + push
+#   3. 동시에 artifact 로도 업로드 (검토용)
 #
-# 사용 흐름:
-#   1. Actions 탭에서 "Visual Baseline (linux)" -> Run workflow
-#   2. 빌드 끝나면 artifact "visual-baseline-linux" 다운로드
-#   3. apps/docs/tests/visual/smoke.spec.ts-snapshots/ 에 풀어서 git commit
-#   4. 이후 CI 의 visual job 이 회귀 차단
+# 권한 요구사항:
+#   - Settings -> Actions -> General -> Workflow permissions:
+#     "Read and write permissions" 활성 (default)
+#   - main 에 branch protection rule 이 있다면 GitHub Actions[bot] 의 push 가 차단될 수
+#     있음. 그 경우 PR 모드로 전환하거나 protection rule 의 'allow specified actors to
+#     bypass' 에 actions[bot] 추가.
 
 on:
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   baseline:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # main 에 직접 push 하기 위해 default checkout 의 fetch-depth 0 + persist-credentials
+          fetch-depth: 0
+          persist-credentials: true
       - uses: pnpm/action-setup@v4
         with: { version: 9 }
       - uses: actions/setup-node@v4
@@ -25,12 +35,27 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter docs build
       - run: pnpm exec playwright install --with-deps chromium
+
       - name: Generate linux baseline
         run: pnpm --filter docs visual:update
-      - name: Upload baseline artifact
+
+      - name: Upload baseline artifact (review)
         uses: actions/upload-artifact@v4
         with:
           name: visual-baseline-linux
           path: apps/docs/tests/visual/smoke.spec.ts-snapshots/*-chromium-linux.png
           retention-days: 30
           if-no-files-found: error
+
+      - name: Commit linux baseline to main
+        run: |
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add apps/docs/tests/visual/smoke.spec.ts-snapshots/
+          if git diff --cached --quiet; then
+            echo "No baseline changes to commit."
+            exit 0
+          fi
+          git commit -m "chore(visual): update linux baseline (workflow_dispatch)"
+          git push origin HEAD:main

@@ -104,9 +104,12 @@ job 이 통과한다.
 
 **Linux (CI) baseline 생성 방법 두 가지**:
 
-1. GitHub Actions workflow (권장) - Actions 탭 → "Visual Baseline (linux)" → Run workflow
-   → artifact `visual-baseline-linux` 다운로드 → `apps/docs/tests/visual/smoke.spec.ts-snapshots/`
-   에 풀어서 commit
+1. GitHub Actions workflow (권장) - Actions 탭 → "Visual Baseline (linux)" → Run workflow.
+   워크플로우가 ubuntu-latest 에서 baseline 을 생성한 뒤 main 에 자동 commit + push 하고
+   artifact (`visual-baseline-linux`) 도 검토용으로 업로드. 클릭 한 번으로 끝.
+   *주의: branch protection rule 이 있다면 actions[bot] push 가 막힐 수 있음. 그럴 땐
+   protection rule 의 "allow specified actors to bypass" 에 actions[bot] 추가하거나
+   workflow 를 PR 생성 모드로 전환.*
 2. Docker 로컬 - Docker Desktop 가동 후
 
    ```bash
