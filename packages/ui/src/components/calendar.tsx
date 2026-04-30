@@ -40,8 +40,11 @@ export function Calendar({ className, classNames, showOutsideDays = true, ...pro
         day_selected:
           "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
         day_today: "bg-muted text-foreground",
-        day_outside: "text-muted-foreground opacity-50",
-        day_disabled: "text-muted-foreground opacity-40 cursor-not-allowed",
+        // v0.8.0: opacity-50 / -40 으로 인한 contrast 미달을 해소. day_outside 는
+        // 다음/이전 달 day 라 구분만 유지하면 되므로 muted-foreground 그대로 + opacity 제거.
+        // day_disabled 는 cursor + line-through 로 시각 단서 강화 후 opacity 완화.
+        day_outside: "text-muted-foreground",
+        day_disabled: "text-muted-foreground line-through cursor-not-allowed",
         day_range_middle: "aria-selected:bg-muted aria-selected:text-muted-foreground",
         day_hidden: "invisible",
         ...classNames,
