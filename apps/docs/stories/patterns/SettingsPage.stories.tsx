@@ -66,7 +66,7 @@ const SettingsLayout = ({ loading, error }: SettingsLayoutProps) => {
                 brand 시그니처). */}
             <a
               href="#billing"
-              className="ml-2 text-accent-brand hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
+              className="ml-2 text-accent-brand hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
             >
               구독 관리
             </a>

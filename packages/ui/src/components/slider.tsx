@@ -38,7 +38,7 @@ export const Slider = React.forwardRef<
           aria-label={thumbAriaLabels?.[i]}
           className={cn(
             "block h-5 w-5 rounded-full border-2 border-primary bg-background shadow-sm transition-colors",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
             "disabled:pointer-events-none disabled:opacity-50",
           )}
         />

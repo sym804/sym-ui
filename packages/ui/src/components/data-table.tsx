@@ -74,7 +74,7 @@ export function DataTable<TData, TValue>({
                         onClick={sortHandler}
                         className={cn(
                           "inline-flex items-center gap-1 -mx-1 rounded-sm px-1 py-0.5",
-                          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background",
+                          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background",
                           "hover:text-foreground",
                         )}
                       >

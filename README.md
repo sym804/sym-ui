@@ -80,6 +80,33 @@ pnpm --filter docs build
 pnpm --filter docs test:a11y:ci
 ```
 
+## 시각 회귀 (v0.7.0)
+
+핵심 10개 stories (Patterns + 토큰 영향이 큰 Components) 의 스크린샷을 베이스라인과 비교.
+CI 의 `visual` job 이 PR 에서 차단한다.
+
+```bash
+# 로컬 visual run (베이스라인이 있어야 함)
+pnpm --filter docs build
+pnpm --filter docs visual
+
+# 베이스라인 갱신 (의도적인 시각 변경 후)
+pnpm --filter docs visual:update
+
+# 실패 보고서 (diff 이미지) 보기
+pnpm --filter docs visual:report
+```
+
+**OS 일관성 주의**: 폰트 anti-aliasing 차이로 Windows / macOS / Ubuntu 베이스라인이 미세하게
+다르다. 베이스라인은 **CI 와 동일한 ubuntu-jammy 환경** 에서 생성하는 것이 표준:
+
+```bash
+docker run --rm -v %CD%:/work -w /work mcr.microsoft.com/playwright:v1.59.1-jammy \
+  pnpm --filter docs visual:update
+```
+
+생성된 `apps/docs/tests/visual/__screenshots__/*.png` 를 git 에 commit.
+
 ## 배포
 
 - `@sym/ui-cli` 는 `npm` 에 publish (changesets + GitHub Actions release.yml)

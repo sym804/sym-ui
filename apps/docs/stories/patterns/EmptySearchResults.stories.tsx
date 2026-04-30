@@ -82,7 +82,7 @@ const Demo = ({
                           <button
                             type="button"
                             onClick={() => setQuery(s)}
-                            className="cursor-pointer hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                            className="cursor-pointer hover:bg-interactive-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                           >
                             {s}
                           </button>

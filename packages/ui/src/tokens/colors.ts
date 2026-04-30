@@ -57,7 +57,7 @@ export const accent = {
 /**
  * 다크 모드 시맨틱 토큰 (CSS variables, L >= 15 절대 밝기 규칙 준수).
  * 실제 값은 templates/globals.css 의 :root / .dark 에서 주입된다.
- * Tailwind 유틸: bg-background / bg-surface / bg-muted / text-foreground / text-muted-foreground / border-border / ring-ring 등
+ * Tailwind 유틸: bg-background / bg-surface / bg-muted / text-foreground / text-muted-foreground / border-border / ring-focus-ring 등
  */
 export const semanticTokens = [
   "background", "foreground",

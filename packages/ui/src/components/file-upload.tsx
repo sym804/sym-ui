@@ -74,7 +74,7 @@ export const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
           }}
           className={cn(
             "flex flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed border-border bg-surface px-6 py-10 text-center text-sm transition-colors",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
             dragOver && "border-primary bg-primary/5",
             disabled && "pointer-events-none opacity-60",
           )}

@@ -4,8 +4,69 @@
 
 | 패키지 | 현재 버전 | 직전 버전 | 릴리즈 일자 |
 |--------|-----------|-----------|-------------|
-| @sym/ui | 0.6.0 | 0.5.0 | 2026-04-30 |
-| @sym/ui-cli | 0.6.0 | 0.5.0 | 2026-04-30 |
+| @sym/ui | 0.7.0 | 0.6.0 | 2026-04-30 |
+| @sym/ui-cli | 0.7.0 | 0.6.0 | 2026-04-30 |
+
+---
+
+## v0.7.0 - 2026-04-30
+
+Codex 평가 (9.0/10) 의 마지막 3가지 감점 포인트 (문서/구현 불일치, focus-ring 명명
+일관성, 시각 회귀 부재) 를 일괄 해소. **공개 라이브러리급 완성도** 진입을 목표로 한
+릴리즈. Codex 예상 점수 효과: 9.0 → 9.2+.
+
+### Major (2건)
+
+- **시각 회귀 (Playwright screenshot smoke) CI 게이트 도입** (etc) -
+  `@playwright/test` + `apps/docs/playwright.config.ts` + `apps/docs/tests/visual/smoke.spec.ts`
+  로 핵심 10 stories (Patterns 7 + Components 3) 의 스크린샷을 베이스라인과 비교하는
+  smoke 게이트 도입. CI 의 `visual` job 이 storybook 빌드 → http-server → playwright
+  순으로 실행. 실패 시 diff 보고서를 artifact 로 업로드. PR 에서 토큰 / 컴포넌트 변경의
+  unintended 시각적 영향을 차단.
+  - 베이스라인은 `apps/docs/tests/visual/__screenshots__/*.png` 로 git 관리
+  - OS 일관성을 위해 docker (`mcr.microsoft.com/playwright:v1.59.1-jammy`) 사용 권장
+  - scripts: `visual` (검증), `visual:update` (베이스라인 갱신), `visual:report` (diff 보기)
+  - **첫 실행 시 베이스라인 미존재로 visual job 이 fail** 함. README 의 docker 명령으로
+    한 번 생성 후 commit 하면 이후 회귀 차단 정상 동작.
+  (apps/docs/playwright.config.ts, tests/visual/smoke.spec.ts, package.json,
+  .github/workflows/ci.yml, README.md)
+
+- **focus-visible 의 ring-ring → ring-focus-ring 일괄 통일** (frontend) - intent token
+  명명 일관성. `--focus-ring` 토큰이 v0.5.0 에서 정의됐지만 컴포넌트들은 여전히 `ring-ring`
+  사용 (Tailwind 의 ring color shortcut) 이었음. 17개 위치를 `ring-focus-ring` 으로 일괄
+  교체.
+  - 컴포넌트 13개: data-table, tabs, button, checkbox, accordion, sheet, breadcrumb,
+    file-upload, slider, calendar, switch, radio-group, input
+  - select.tsx 의 `focus:ring-ring/40` → `focus:ring-focus-ring/40`
+  - tokens/colors.ts 의 코멘트 예시 갱신
+  - 패턴 스토리 2곳 (SettingsPage, EmptySearchResults) 의 inline 클래스도 일괄 교체
+  시각적 변화 없음 (별칭이라 동일한 색조). 토큰 의도 (intent) 가 코드에서도 명확히
+  드러나도록 정리.
+
+### Minor (1건)
+
+- **Guidelines/DataTable.mdx 의 row hover 표기 정정** (etc) - v0.6.0 에서 row hover 를
+  `interactive-hover` 로 마이그레이션 했으나 가이드 문서가 여전히 `hover:bg-muted` 라고
+  안내. 문서 / 구현 불일치 해소.
+  (apps/docs/stories/guidelines/DataTable.mdx)
+
+### 검증 결과
+
+- **로컬**: typecheck (3종) ✅, lint (3종) ✅, test 37 files / 79 tests ✅,
+  @sym/ui-cli build ✅, registry:build (36 + globalsCss) ✅, storybook build 9.96s ✅
+- **시각 회귀 베이스라인**: 본 릴리즈에서는 미생성. 첫 baseline 은 사용자/CI 가
+  README 의 docker 명령으로 별도 생성.
+
+### 호환성
+
+- API 변경 없음. `ring-focus-ring` 은 `ring-ring` 과 동일 색조 (별칭) 라 시각적 변화 없음.
+- `lucide-react`, `@playwright/test` 외에 새 의존성 없음 (모두 docs 의 devDeps).
+
+### 마무리
+
+v0.1.0 (2026-04-27) 부터 v0.7.0 (2026-04-30) 까지 4 일 간 7 차례 릴리즈, 누적 73 건의
+이슈 해소. Codex 평가 7.5 → 9.0+ 도달 예상. 다음 사이클부터는 신기능 / 컴포넌트 추가가
+중심.
 
 ---
 

@@ -33,7 +33,7 @@ export const TabsTrigger = React.forwardRef<
       // v0.6.0: 비활성 trigger hover 추가 (interactive-hover) + active 가 진입 시 hover 가
       // 우선되지 않도록 data-[state=active] 에서 hover 무효화.
       "hover:bg-interactive-hover/60",
-      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
       "disabled:pointer-events-none disabled:opacity-50",
       "data-[state=active]:bg-surface data-[state=active]:text-foreground data-[state=active]:shadow-sm data-[state=active]:hover:bg-surface",
       className,
@@ -49,7 +49,7 @@ export const TabsContent = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <TabsPrimitive.Content
     ref={ref}
-    className={cn("mt-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-background", className)}
+    className={cn("mt-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-background", className)}
     {...props}
   />
 ));
