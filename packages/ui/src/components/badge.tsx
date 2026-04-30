@@ -20,8 +20,10 @@ const badgeVariants = cva(
   "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold tracking-[0.2px]",
   {
     variants: {
+      // v0.8.0: primary variant 의 text 를 primary-700/-200 으로 진하게 해 WCAG AA
+      // 대비 (4.5:1) 확보. 기존 text-primary 는 bg-primary/15 위에서 contrast 미달.
       variant: {
-        primary: "bg-primary/15 text-primary",
+        primary: "bg-primary/15 text-primary-700 dark:text-primary-200",
         neutral: "bg-muted text-foreground",
         success: "bg-status-success-bg text-status-success-fg",
         warning: "bg-status-warning-bg text-status-warning-fg",

@@ -31,6 +31,11 @@ export interface ComboboxProps {
   placeholder?: string;
   searchPlaceholder?: string;
   searchAriaLabel?: string;
+  /**
+   * Trigger button 의 aria-label. visible label 이 없을 때 권장.
+   * 미지정 시 placeholder 또는 selected 값을 fallback 으로 사용.
+   */
+  triggerAriaLabel?: string;
   emptyText?: string;
   className?: string;
   disabled?: boolean;
@@ -45,6 +50,7 @@ export const Combobox = React.forwardRef<HTMLButtonElement, ComboboxProps>(
       placeholder = "Select...",
       searchPlaceholder = "Search...",
       searchAriaLabel,
+      triggerAriaLabel,
       emptyText = "No results",
       className,
       disabled,
@@ -63,6 +69,9 @@ export const Combobox = React.forwardRef<HTMLButtonElement, ComboboxProps>(
             variant="outline"
             role="combobox"
             aria-expanded={open}
+            // visible label 이 placeholder/selected 로 채워지지만 axe 가 first paint
+            // 이전을 검사하면 button-name 위반으로 잡을 수 있음. aria-label 을 항상 부여.
+            aria-label={triggerAriaLabel ?? selected?.label ?? placeholder}
             disabled={disabled}
             className={cn("w-[220px] justify-between", className)}
           >
