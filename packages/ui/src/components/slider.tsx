@@ -21,6 +21,9 @@ export const Slider = React.forwardRef<
   SliderProps
 >(({ className, defaultValue, value, thumbAriaLabels, ...props }, ref) => {
   const thumbCount = (value ?? defaultValue ?? [0]).length;
+  // 단일 thumb 일 때 root 의 aria-label 을 thumb 에 자동 fallback (axe 의
+  // aria-input-field-name rule 대비). 다중 thumb 은 thumbAriaLabels 가 우선.
+  const rootAriaLabel = (props as { "aria-label"?: string })["aria-label"];
   return (
     <SliderPrimitive.Root
       ref={ref}
@@ -35,7 +38,7 @@ export const Slider = React.forwardRef<
       {Array.from({ length: thumbCount }).map((_, i) => (
         <SliderPrimitive.Thumb
           key={i}
-          aria-label={thumbAriaLabels?.[i]}
+          aria-label={thumbAriaLabels?.[i] ?? (thumbCount === 1 ? rootAriaLabel : undefined)}
           className={cn(
             "block h-5 w-5 rounded-full border-2 border-primary bg-background shadow-sm transition-colors",
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
