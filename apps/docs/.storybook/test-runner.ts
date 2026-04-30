@@ -29,6 +29,12 @@ const config: TestRunnerConfig = {
           // 많아 우선 제외 (필요 시 allowlist 방식으로 단계 도입).
           values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"],
         },
+        // axe.run 에 직접 전달되는 rules 옵션. configureAxe 와 별개로 명시해야
+        // 일부 axe-playwright 버전에서도 안전하게 disable 적용된다.
+        rules: {
+          region: { enabled: false },
+          "aria-required-children": { enabled: false },
+        },
       },
     });
   },
