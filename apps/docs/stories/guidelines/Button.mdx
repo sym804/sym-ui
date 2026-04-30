@@ -1,0 +1,53 @@
+import { Meta } from "@storybook/blocks";
+
+<Meta title="Guidelines/Button" />
+
+# Button 사용 규칙
+
+CTA, 폼 액션, 인라인 명령 등 거의 모든 행동의 진입점. variant / size 의 의미를 일관되게
+지키는 것이 디자인 시스템의 핵심.
+
+## variant 매핑
+
+| variant | 의미 | 사용 시점 | 한 화면당 권장 갯수 |
+|---------|------|----------|---------------------|
+| `primary` | 페이지의 주된 행동 | 저장 / 등록 / 다음 단계 / 결제 | **1, 최대 2** (영역이 분리될 때) |
+| `secondary` | 보조 행동 | 임시 저장, 미리보기, 토글 보조 | 제한 없음 |
+| `outline` | 비파괴 보조 | 취소, 닫기, 뒤로가기, 필터 적용 | 제한 없음 |
+| `ghost` | 인라인/툴바 | 아이콘만 있는 명령, 메뉴 진입 | 제한 없음 |
+| `destructive` | 되돌릴 수 없는 위험 | 삭제, 영구 차단, 강제 종료 | **1**, 같은 행에 두 개 금지 |
+
+## size 매핑
+
+| size | 사용 시점 |
+|------|----------|
+| `sm` | 밀집된 툴바, 인라인 액션, DataTable 셀 안 |
+| `default` | 폼 / 카드 풋터 / 페이지 액션의 기본 |
+| `lg` | 랜딩 페이지의 hero CTA |
+| `icon` | 정사각형 아이콘 전용 (40×40) |
+
+## 페어링 규칙
+
+- 풋터에 두 개일 때는 `[outline 취소][primary 저장]` 순서. **primary 가 항상 오른쪽**.
+- 모바일에서 두 개일 때는 세로 스택, **primary 가 위**.
+- destructive 는 confirmation Dialog 안에서만 사용. 인라인은 `outline + 빨간 텍스트` 가
+  더 안전.
+
+## asChild 사용
+
+`<Link>` 나 `<a>` 위에 Button 스타일을 입히려면 `asChild` 사용. ref 타입은 `<Button>` 의
+HTMLButtonElement 로 고정되므로, ref 가 필요하면 자식 요소 타입에 맞게 cast.
+
+```tsx
+<Button asChild>
+  <Link href="/settings">설정으로 이동</Link>
+</Button>
+```
+
+## 안티패턴
+
+- 같은 영역에 `primary` 가 3 개 이상 → 사용자가 무엇이 주된 행동인지 판단 불가
+- `destructive` 두 개를 나란히 배치 → 잘못된 선택을 유도
+- 텍스트 button 에 size=`icon` 사용 → 정사각형이라 텍스트가 잘림
+- `ghost` 를 페이지의 주된 CTA 로 사용 → 발견성 낮음
+- 한 줄에 5 개 이상 button → 툴바로 묶거나 DropdownMenu 로 정리

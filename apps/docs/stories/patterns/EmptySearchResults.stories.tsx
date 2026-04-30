@@ -121,3 +121,18 @@ export const WithSuggestions: Story = {
   },
   render: () => <Demo suggestions={["디자인 토큰", "다크 모드", "접근성", "shadcn"]} />,
 };
+
+export const Dark: Story = {
+  parameters: {
+    themes: { themeOverride: "dark" },
+    docs: { description: { story: "다크 모드에서 EmptyState + 검색 입력의 surface 대비 검토." } },
+  },
+  decorators: [
+    (StoryFn) => (
+      <div className="dark min-h-screen bg-background text-foreground">
+        <StoryFn />
+      </div>
+    ),
+  ],
+  render: () => <Demo suggestions={["디자인 토큰", "다크 모드", "접근성"]} />,
+};

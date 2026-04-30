@@ -140,3 +140,18 @@ export const Blocked: Story = {
     />
   ),
 };
+
+export const Dark: Story = {
+  parameters: {
+    themes: { themeOverride: "dark" },
+    docs: { description: { story: "다크 모드에서 Stepper 의 완료/현재/대기 단계 시각 분리, Separator 대비 검토." } },
+  },
+  decorators: [
+    (StoryFn) => (
+      <div className="dark min-h-screen bg-background text-foreground">
+        <StoryFn />
+      </div>
+    ),
+  ],
+  render: () => <Demo initialStep={2} />,
+};

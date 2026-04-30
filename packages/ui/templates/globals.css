@@ -11,6 +11,8 @@
     --foreground: 222 16% 11%;
     --surface: 0 0% 100%;
     --surface-elevated: 30 10% 96%;
+    --surface-subtle: 30 10% 98%;
+    --surface-raised: 0 0% 100%;
     --muted: 30 10% 96%;
     --muted-foreground: 30 4% 40%;
     --border: 30 8% 90%;
@@ -20,11 +22,25 @@
     --primary-foreground: 0 0% 100%;
     --accent: 30 10% 96%;
     --accent-foreground: 222 16% 11%;
+    --accent-brand: 173 80% 35%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
     --popover: 0 0% 100%;
     --popover-foreground: 222 16% 11%;
     --overlay: 222 16% 6%;
+    /* Status intent (filled bg + readable fg). Alert / Toast / Badge 의 상태 표현용. */
+    --status-success-bg: 142 76% 95%;
+    --status-success-fg: 142 76% 28%;
+    --status-warning-bg: 38 92% 95%;
+    --status-warning-fg: 38 92% 30%;
+    --status-danger-bg: 0 84% 95%;
+    --status-danger-fg: 0 84% 35%;
+    --status-info-bg: 217 91% 95%;
+    --status-info-fg: 217 91% 35%;
+    /* Interactive intent. hover / active 시 사용하는 layer. focus-ring 은 ring 별칭. */
+    --interactive-hover: 30 10% 92%;
+    --interactive-active: 30 10% 88%;
+    --focus-ring: 243 75% 59%;
   }
   .dark {
     /* L >= 15 absolute lightness rule applied to every dark surface */
@@ -32,6 +48,8 @@
     --foreground: 230 10% 87%;
     --surface: 230 16% 18%;
     --surface-elevated: 230 16% 22%;
+    --surface-subtle: 230 14% 13%;
+    --surface-raised: 230 16% 24%;
     --muted: 230 16% 22%;
     --muted-foreground: 230 8% 70%;
     --border: 230 14% 28%;
@@ -41,11 +59,24 @@
     --primary-foreground: 240 25% 12%;
     --accent: 230 16% 22%;
     --accent-foreground: 230 10% 87%;
+    --accent-brand: 172 66% 58%;
     --destructive: 0 70% 60%;
     --destructive-foreground: 0 0% 100%;
     --popover: 230 16% 18%;
     --popover-foreground: 230 10% 87%;
     --overlay: 0 0% 0%;
+    /* Status intent (dark: bg 진하게, fg 밝게) */
+    --status-success-bg: 142 60% 14%;
+    --status-success-fg: 142 70% 70%;
+    --status-warning-bg: 38 80% 14%;
+    --status-warning-fg: 38 92% 72%;
+    --status-danger-bg: 0 70% 16%;
+    --status-danger-fg: 0 84% 76%;
+    --status-info-bg: 217 80% 18%;
+    --status-info-fg: 217 91% 78%;
+    --interactive-hover: 230 16% 26%;
+    --interactive-active: 230 16% 32%;
+    --focus-ring: 234 89% 74%;
   }
   html { font-family: theme("fontFamily.sans"); }
   body { background-color: hsl(var(--background)); color: hsl(var(--foreground)); }

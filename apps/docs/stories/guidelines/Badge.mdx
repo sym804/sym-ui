@@ -1,0 +1,44 @@
+import { Meta } from "@storybook/blocks";
+
+<Meta title="Guidelines/Badge" />
+
+# Badge 사용 규칙
+
+상태 / 카테고리 / 카운트를 짧게 알려주는 보조 라벨. **3 단어 / 16 자 이내** 가 원칙.
+
+## variant 매핑
+
+| variant | 의미 | 예시 |
+|---------|------|------|
+| `primary` | 강조 / 신규 / Pro 계정 | "Pro", "신규", "Beta" |
+| `neutral` | 카테고리 / 태그 / 분류 | "frontend", "design", "v2" |
+| `success` | 정상 / 완료 / 활성 | "결제 완료", "온라인", "활성" |
+| `warning` | 주의 / 만료 임박 / 대기 | "만료 예정", "대기중", "검토 필요" |
+| `danger` | 오류 / 실패 / 차단 | "실패", "차단됨", "오류" |
+| `outline` | 가독성 우선, 색상 노이즈 회피 | 다양한 카테고리가 동시에 많을 때 |
+
+## 사용 가이드
+
+- 한 영역에 같은 색의 Badge 가 5 개 이상이면 시각적 정보가 사라진다 → `outline` 으로 통일
+- 같은 의미 (예: "결제 완료") 는 항상 같은 variant 를 매핑한다. 페이지마다 색이 다르면 안 됨
+- 카운트 (`12`, `+3`) 는 `primary` 또는 `neutral`. 다른 색 섞지 않음
+- 모바일에서 Badge 가 잘리는 경우 width 고정 X. wrap 보다 truncate 가 안전
+
+## asChild 패턴
+
+`NavLink`, `<a>` 위에 Badge 스타일을 입히려면 `asChild`. ref 타입은 HTMLSpanElement
+고정이라 cast 필요할 수 있음.
+
+```tsx
+<Badge asChild variant="outline">
+  <a href="/tags/frontend">frontend</a>
+</Badge>
+```
+
+## 안티패턴
+
+- 한 페이지에 `success` / `warning` / `danger` 가 시각적 톤 안내 외에 단순 장식으로 섞임
+  → 사용자가 색을 의미 단서로 학습하지 못함
+- Badge 안에 button / link 가 직접 들어감 (asChild 없이) → 클릭 영역이 의미 깨짐
+- 16 자를 넘기는 Badge → Card 의 description 으로 옮김
+- Badge 만으로 핵심 행동 표현 (예: "삭제" 라벨링만) → Button 으로 승격

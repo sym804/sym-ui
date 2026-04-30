@@ -12,6 +12,8 @@ module.exports = {
         surface: {
           DEFAULT: "hsl(var(--surface) / <alpha-value>)",
           elevated: "hsl(var(--surface-elevated) / <alpha-value>)",
+          subtle: "hsl(var(--surface-subtle) / <alpha-value>)",
+          raised: "hsl(var(--surface-raised) / <alpha-value>)",
         },
         muted: {
           DEFAULT: "hsl(var(--muted) / <alpha-value>)",
@@ -20,6 +22,7 @@ module.exports = {
         accent: {
           DEFAULT: "hsl(var(--accent) / <alpha-value>)",
           foreground: "hsl(var(--accent-foreground) / <alpha-value>)",
+          brand: "hsl(var(--accent-brand) / <alpha-value>)",
         },
         popover: {
           DEFAULT: "hsl(var(--popover) / <alpha-value>)",
@@ -46,6 +49,32 @@ module.exports = {
         warning: "#f2a900",
         danger: "#f04438",
         info: "#3d7eff",
+        // Intent: status surface + readable text. bg-status-success-bg / text-status-success-fg
+        "status-success": {
+          bg: "hsl(var(--status-success-bg) / <alpha-value>)",
+          fg: "hsl(var(--status-success-fg) / <alpha-value>)",
+        },
+        "status-warning": {
+          bg: "hsl(var(--status-warning-bg) / <alpha-value>)",
+          fg: "hsl(var(--status-warning-fg) / <alpha-value>)",
+        },
+        "status-danger": {
+          bg: "hsl(var(--status-danger-bg) / <alpha-value>)",
+          fg: "hsl(var(--status-danger-fg) / <alpha-value>)",
+        },
+        "status-info": {
+          bg: "hsl(var(--status-info-bg) / <alpha-value>)",
+          fg: "hsl(var(--status-info-fg) / <alpha-value>)",
+        },
+        // Intent: interactive layer. hover/active layer 색상.
+        interactive: {
+          hover: "hsl(var(--interactive-hover) / <alpha-value>)",
+          active: "hsl(var(--interactive-active) / <alpha-value>)",
+        },
+      },
+      ringColor: {
+        // focus-ring: 의미상 별칭 (ring 과 동일하지만 token 이름이 의도를 드러냄)
+        "focus-ring": "hsl(var(--focus-ring) / <alpha-value>)",
       },
       fontFamily: {
         sans: ["Pretendard Variable", "Pretendard", "ui-sans-serif", "system-ui", "sans-serif"],

@@ -214,3 +214,18 @@ export const Mobile: Story = {
   },
   render: () => <Demo />,
 };
+
+export const Dark: Story = {
+  parameters: {
+    themes: { themeOverride: "dark" },
+    docs: { description: { story: "다크 모드에서 테이블 row hover, 정렬 헤더 focus ring, Badge status 색상 검토." } },
+  },
+  decorators: [
+    (StoryFn) => (
+      <div className="dark min-h-screen bg-background text-foreground">
+        <StoryFn />
+      </div>
+    ),
+  ],
+  render: () => <Demo />,
+};

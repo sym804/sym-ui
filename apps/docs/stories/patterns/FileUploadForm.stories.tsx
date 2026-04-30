@@ -143,3 +143,18 @@ export const Success: Story = {
   },
   render: () => <Demo success />,
 };
+
+export const Dark: Story = {
+  parameters: {
+    themes: { themeOverride: "dark" },
+    docs: { description: { story: "다크 모드에서 Alert (info / success / destructive) 색상 가시성 + drop zone border 대비 검토." } },
+  },
+  decorators: [
+    (StoryFn) => (
+      <div className="dark min-h-screen bg-background text-foreground">
+        <StoryFn />
+      </div>
+    ),
+  ],
+  render: () => <Demo />,
+};

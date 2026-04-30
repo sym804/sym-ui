@@ -1,0 +1,45 @@
+import { Meta } from "@storybook/blocks";
+
+<Meta title="Guidelines/Alert" />
+
+# Alert 사용 규칙
+
+페이지 상단 / 폼 상단 / 카드 내부에 노출되어 즉각 인지가 필요한 메시지. **role 이 자동
+분기** 되므로 variant 선택이 곧 a11y 의도가 된다.
+
+## variant 매핑 + role
+
+| variant | 의미 | 자동 role | 예시 |
+|---------|------|-----------|------|
+| `info` | 안내 / 알림 / 변경 사항 | `status` (덜 침투적) | "새 버전이 출시되었습니다" |
+| `success` | 작업 완료 / 정상 처리 | `status` | "저장이 완료되었습니다" |
+| `warning` | 주의 / 만료 임박 / 입력 검토 | `alert` (즉시 안내) | "곧 세션이 만료됩니다" |
+| `destructive` | 오류 / 실패 / 차단 | `alert` | "요청을 처리하지 못했습니다" |
+
+## 구성 요소
+
+- `AlertTitle` : **필수**. 한 문장 / 16 자 이내
+- `AlertDescription` : **강력 권장**. 무엇이 / 왜 / 어떻게 해야 하는지 1 ~ 2 문장
+- icon: 좌측 절대 위치. `[&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4` 가 자동 처리
+
+```tsx
+<Alert variant="destructive">
+  <AlertCircle aria-hidden className="absolute left-4 top-4 h-4 w-4" />
+  <AlertTitle>저장하지 못했습니다</AlertTitle>
+  <AlertDescription>네트워크 연결을 확인하고 다시 시도해주세요.</AlertDescription>
+</Alert>
+```
+
+## 위치 가이드
+
+- **폼 검증 오류**: 폼 상단 (필드 위) 에 `destructive` Alert
+- **저장/등록 성공**: 폼 상단 또는 페이지 상단에 `success`
+- **곧 만료/주의**: `warning` 을 페이지 상단 banner 형태
+- **공지/안내**: `info` 를 카드 내부 또는 페이지 상단
+
+## 안티패턴
+
+- 한 화면에 Alert 가 3 개 이상 동시에 → 우선순위가 사라짐. 가장 중요한 1 개만 남기고 나머지는 toast 또는 inline 메시지로
+- `destructive` 를 단순 안내에 사용 → 색이 의미를 잃음
+- AlertDescription 없이 AlertTitle 만 → 사용자가 다음 행동을 모름
+- 모바일에서 Alert 안에 button 을 그대로 두기 → 별도 행으로 분리

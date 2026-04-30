@@ -1,4 +1,12 @@
 // packages/ui/src/tokens/colors.ts
+//
+// 토큰 계층 (3 단계):
+//   1. Primitive   - primary, neutral, semantic (이 파일)
+//   2. Semantic    - background, foreground, surface, muted, ring 등 (templates/globals.css)
+//   3. Intent      - status (success/warning/danger/info × bg/fg), surface (subtle/raised),
+//                    interactive (hover/active), focus-ring (templates/globals.css)
+// 컴포넌트는 가능한 한 Intent / Semantic 토큰만 참조하고, Primitive 직접 사용은 피한다.
+
 // Primary 는 v0.3.0 부터 Indigo 스케일을 사용한다 (이전: Tailwind blue).
 // Tailwind blue 그대로 사용 시 brand 식별력이 약하다는 평가에 따른 변경.
 export const primary = {
@@ -36,6 +44,16 @@ export const semantic = {
   info: "#3d7eff",
 } as const;
 
+// Brand accent (v0.5.0 도입). indigo primary 의 보조 시그니처. 차분한 teal 계열.
+// 사용 가이드: link hover 강조, badge accent, 서브 헤딩의 강조 색 등 "primary 가 아닌
+// 곳" 에서 brand 정체성을 유지하기 위한 색조.
+export const accent = {
+  brand: {
+    light: "#0d9488", // teal-600 (light 모드의 --accent-brand)
+    dark: "#2dd4bf",  // teal-400 (dark 모드의 --accent-brand)
+  },
+} as const;
+
 /**
  * 다크 모드 시맨틱 토큰 (CSS variables, L >= 15 절대 밝기 규칙 준수).
  * 실제 값은 templates/globals.css 의 :root / .dark 에서 주입된다.
@@ -43,16 +61,30 @@ export const semantic = {
  */
 export const semanticTokens = [
   "background", "foreground",
-  "surface", "surface-elevated",
+  "surface", "surface-elevated", "surface-subtle", "surface-raised",
   "muted", "muted-foreground",
-  "border", "input", "ring",
+  "border", "input", "ring", "focus-ring",
   "primary", "primary-foreground",
-  "accent", "accent-foreground",
+  "accent", "accent-foreground", "accent-brand",
   "destructive", "destructive-foreground",
   "popover", "popover-foreground",
+  "overlay",
 ] as const;
 export type SemanticToken = (typeof semanticTokens)[number];
 
-export const colors = { primary, neutral, semantic } as const;
+/**
+ * Intent 토큰 (status × bg/fg, interactive layer). v0.5.0 도입.
+ * Tailwind 유틸 예: bg-status-success-bg text-status-success-fg, bg-interactive-hover.
+ */
+export const intentTokens = [
+  "status-success-bg", "status-success-fg",
+  "status-warning-bg", "status-warning-fg",
+  "status-danger-bg", "status-danger-fg",
+  "status-info-bg", "status-info-fg",
+  "interactive-hover", "interactive-active",
+] as const;
+export type IntentToken = (typeof intentTokens)[number];
+
+export const colors = { primary, neutral, semantic, accent } as const;
 export type ColorScale = typeof primary;
 export type SemanticColor = keyof typeof semantic;

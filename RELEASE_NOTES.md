@@ -4,8 +4,76 @@
 
 | 패키지 | 현재 버전 | 직전 버전 | 릴리즈 일자 |
 |--------|-----------|-----------|-------------|
-| @sym/ui | 0.4.0 | 0.3.0 | 2026-04-30 |
-| @sym/ui-cli | 0.4.0 | 0.3.0 | 2026-04-30 |
+| @sym/ui | 0.5.0 | 0.4.0 | 2026-04-30 |
+| @sym/ui-cli | 0.5.0 | 0.4.0 | 2026-04-30 |
+
+---
+
+## v0.5.0 - 2026-04-30
+
+Codex 디자인 평가 (8.3/10) 에서 "9점대로 가려면 더 많은 컴포넌트가 아니라 **더 선명한
+기준**" 이 필요하다는 지적을 받아, 시스템성을 끌어올리는 4 가지를 일괄 도입.
+Codex 예상 점수 효과: 8.3 → 9.0+.
+
+### Major (4건)
+
+- **Brand accent (teal) 토큰 도입** (frontend) - indigo primary 의 보조 시그니처로
+  차분한 teal 추가. light `--accent-brand: 173 80% 35%` (teal-600 #0d9488 살짝 밝게),
+  dark `172 66% 58%` (teal-400 기준 다크 가시성). Tailwind 노출 `accent-brand` 색상.
+  사용 가이드: link hover, badge accent, 서브 헤딩의 강조 색 등 "primary 가 아닌 곳" 의
+  brand 정체성 유지. (packages/ui/src/tokens/colors.ts, templates/globals.css,
+  tailwind.preset.cjs)
+
+- **Intent 토큰 3계층 도입 (status / surface / interactive)** (frontend) - primitive
+  + semantic 의 기존 2계층 위에 의미 기반 intent 계층 추가. 토큰은 구체적 사용처를
+  드러내는 이름이라 컴포넌트 코드의 의도가 토큰 단계에서 보임.
+  - Status: `--status-success-bg/-fg`, `--status-warning-bg/-fg`, `--status-danger-bg/-fg`,
+    `--status-info-bg/-fg` (light/dark 양쪽). Alert / Toast / Badge 의 상태 표현용.
+  - Surface: `--surface-subtle` (그룹 구분 옅은 layer), `--surface-raised` (elevated 보다
+    더 부각)
+  - Interactive: `--interactive-hover`, `--interactive-active`, `--focus-ring` (ring 의
+    의미 별칭)
+  Tailwind 노출: `bg-status-success-bg text-status-success-fg`, `bg-surface-subtle`,
+  `bg-interactive-hover`. tokens/colors.ts 의 `intentTokens` 배열로 타입 export.
+  (packages/ui/templates/globals.css, tailwind.preset.cjs, src/tokens/colors.ts)
+
+- **5개 패턴 스토리에 Dark variant 추가** (etc) - Settings Page / Empty Search Results /
+  File Upload Form / DataTable with Filters / Account Activity 각각에 `Dark` story 추가.
+  themes addon 의 themeOverride + dark wrapper decorator 조합으로 강제 다크. 각 패턴의
+  description 에 다크에서 별도로 검토할 항목 (border 대비, ring 가시성, status 색상,
+  hover layer 등) 명시. 총 23 stories → 41 stories 가 아니라 패턴 영역만 18 → 23 으로
+  증가. (apps/docs/stories/patterns/*.stories.tsx)
+
+- **Guidelines/ MDX 5종 도입 (사용 규칙 문서화)** (etc) - "이런 컴포넌트가 있다" 수준에서
+  "이렇게 쓰고 / 이렇게 쓰지 않는다" 수준으로 격상. Codex 가 9 점대 핵심으로 짚은 항목.
+  - **Button**: variant 매핑표, size 매핑표, 페어링 규칙 (primary 우측 / 모바일 세로),
+    asChild, 안티패턴 5 가지
+  - **Badge**: 색상 매핑, 길이 가이드 (16자), asChild 패턴, 안티패턴
+  - **Alert**: variant 별 자동 role 매핑, 위치 가이드, 카피 길이, 안티패턴
+  - **EmptyState**: 시나리오 분류 (첫 방문/빈 검색/권한 없음/오류), title 20자/desc 60자,
+    action 갯수, 안티패턴
+  - **DataTable**: column 디자인표, 상태 매트릭스 (Loading/Empty/Mobile), Pagination 위치,
+    안티패턴 5 가지
+  (apps/docs/stories/guidelines/*.mdx)
+
+### 검증 결과
+
+- **로컬**: typecheck (3종) ✅, lint (3종) ✅, test 37 files / 79 tests ✅,
+  @sym/ui-cli build ✅, registry:build (36 + globalsCss) ✅, storybook build 10.52s ✅
+- **Storybook stories**: 컴포넌트 36 + 패턴 23 + Guidelines 5 + Brand 3 = **67 stories**
+
+### 호환성
+
+- 기존 토큰 / 컴포넌트 API 변경 없음. 새 intent 토큰은 추가형이라 기존 사용처에 영향 없음.
+- 컴포넌트의 직접적 마이그레이션은 v0.5.0 에서 보류 (토큰만 정의). 향후 v0.6 에서 Alert /
+  Badge / Button hover 등을 새 intent 토큰으로 점진적 마이그레이션.
+
+### 의도적 미처리 (v0.6.0 이상)
+
+- **Playwright/Chromatic 시각 회귀 게이트** - 시스템이 안정된 뒤 베이스라인 관리 비용을
+  최소화하기 위해 별도 사이클로 분리.
+- **컴포넌트 본체의 intent 토큰 마이그레이션** - 토큰은 정의됐고, 시각 회귀 게이트가 켜진
+  뒤에 점진적으로 적용.
 
 ---
 

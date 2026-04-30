@@ -205,3 +205,18 @@ export const Mobile: Story = {
   },
   render: () => <SettingsLayout />,
 };
+
+export const Dark: Story = {
+  parameters: {
+    themes: { themeOverride: "dark" },
+    docs: { description: { story: "다크 모드에서 동일 화면. surface / border 대비 + Tabs underline 가시성 검토." } },
+  },
+  decorators: [
+    (StoryFn) => (
+      <div className="dark min-h-screen bg-background text-foreground">
+        <StoryFn />
+      </div>
+    ),
+  ],
+  render: () => <SettingsLayout />,
+};
