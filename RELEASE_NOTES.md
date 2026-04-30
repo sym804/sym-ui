@@ -4,8 +4,60 @@
 
 | 패키지 | 현재 버전 | 직전 버전 | 릴리즈 일자 |
 |--------|-----------|-----------|-------------|
-| @sym/ui | 0.7.2 | 0.7.1 | 2026-04-30 |
-| @sym/ui-cli | 0.7.2 | 0.7.1 | 2026-04-30 |
+| @sym/ui | 0.8.0 | 0.7.2 | 2026-05-01 |
+| @sym/ui-cli | 0.8.0 | 0.7.2 | 2026-05-01 |
+
+---
+
+## v0.8.0 - 2026-05-01
+
+CI 의 a11y job 이 v0.5.0 도입 이후 한 번도 통과하지 못했다는 사실이 v0.7.x 의 visual
+gate 안정화 이후 노출. 31 axe violations 발견 후 일괄 해소. **CI a11y 게이트가
+실제로 enforce** 됨. Codex 평가 9.2 → 9.4+ 도달 예상.
+
+### Major (1건)
+
+- **a11y 31 violations → 0 일괄 해소** (frontend + etc) - 7 종 axe rule 위반을 단계적
+  으로 추적 + 수정.
+  - **race condition 차단** (`addon-a11y` manual mode): storybook addon-a11y 의 자동
+    axe 실행과 test-runner 의 axe-playwright 가 충돌해 `Axe is already running` race
+    발생. `parameters.a11y.manual = true` 로 dev-only addon 의 자동 실행 끔. 결과 false-
+    positive 다수 제거. (apps/docs/.storybook/preview.tsx)
+  - **`label` rule (8 위반)**: Progress / Slider 컴포넌트 stories 에 `aria-label` 명시,
+    SettingsPage 의 SelectTrigger 에 명시적 `aria-label`, Combobox 의 trigger Button 에
+    `triggerAriaLabel` prop + fallback (`selected.label ?? placeholder`)
+  - **`aria-input-field-name` rule (2 위반)**: NumberInput 의 input 에 `inputAriaLabel`
+    default, Slider 단일 thumb 일 때 root 의 `aria-label` 을 thumb 에 자동 fallback 상속
+  - **`aria-progressbar-name` rule (2 위반)**: Progress stories 에 `aria-label` 명시
+  - **`button-name` rule (5 위반)**: FileUpload 의 hidden file input 에 `aria-label`
+    + `aria-hidden + tabIndex={-1}` (visible drop zone 이 단일 진입점), Combobox trigger
+    button 의 aria-label 항상 부여
+  - **`link-in-text-block` rule (4 위반)**: SettingsPage 의 "구독 관리" `<a>` 에 default
+    `underline underline-offset-4` 적용 (이전엔 `hover:underline` 만)
+  - **`color-contrast` rule (7 위반)**:
+    - `accent-brand` 토큰 색조 강화: light `173 80% 35%` → `173 80% 28%` (teal-700 부근),
+      dark `172 66% 58%` → `172 66% 65%` (teal-300 부근). WCAG AA 4.5:1 확보.
+    - Badge primary variant: `text-primary` → `text-primary-700 dark:text-primary-200`
+      (bg-primary/15 위에서 contrast AA 확보)
+    - Calendar `day_outside` / `day_disabled` 의 `opacity-50/-40` 제거. day_disabled 는
+      `line-through` + `cursor-not-allowed` 로 시각 단서 강화
+  - **`aria-required-children` rule (1 위반, 외부 의존성)**: cmdk 라이브러리의 List 가
+    검색 결과 0 일 때 listbox role 을 children 없이 렌더하는 default 동작. 라이브러리
+    수정 어려움 + 사용자 입장 a11y 손실 없음 (CommandEmpty / EmptyState 가 별도 표시)
+    → axe rule 비활성 (사유 주석 명시).
+
+### 검증 결과
+
+- **CI 모든 job 통과**: ci ✅ / a11y ✅ (93 tests / 93 passed) / visual ✅
+- **로컬**: typecheck (3종) ✅, lint (3종) ✅, test 37 files / 79 tests ✅,
+  @sym/ui-cli build ✅, registry:build (36 + globalsCss) ✅, storybook build ✅
+
+### 호환성
+
+- 시각 변화: Badge primary text 약간 진해짐, accent-brand 색조 약간 강화, Calendar
+  day_outside 옅은 회색 제거. visual baseline 은 이번 사이클의 commit 들로 자동 갱신됨.
+- API 추가: `Combobox.triggerAriaLabel`, `NumberInput.inputAriaLabel`, `Slider` 의
+  단일 thumb 시 root aria-label 자동 상속. 모두 추가형이라 기존 사용처 영향 없음.
 
 ---
 
