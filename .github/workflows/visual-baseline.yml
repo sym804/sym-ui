@@ -33,7 +33,7 @@ jobs:
         with: { node-version: 20, cache: pnpm }
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter docs build
-      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm --filter docs exec playwright install --with-deps chromium
 
       - name: Generate linux baseline
         run: pnpm --filter docs visual:update
