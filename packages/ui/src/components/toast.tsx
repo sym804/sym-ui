@@ -23,15 +23,17 @@ export const ToastViewport = React.forwardRef<
 ));
 ToastViewport.displayName = ToastPrimitive.Viewport.displayName;
 
+// v0.6.0: variant 별로 background / text / border 모두를 intent token (status-*-bg/-fg)
+// 기반으로 마이그레이션. 이전엔 border 만 색조였고 bg 가 popover 라 의미가 약했음.
 const toastVariants = cva(
-  "group pointer-events-auto relative flex w-full items-start gap-3 rounded-md border p-4 bg-popover text-popover-foreground shadow-lg",
+  "group pointer-events-auto relative flex w-full items-start gap-3 rounded-md border p-4 shadow-lg",
   {
     variants: {
       variant: {
-        success: "border-success/30",
-        danger: "border-danger/30",
-        info: "border-info/30",
-        warning: "border-warning/30",
+        info: "bg-status-info-bg text-status-info-fg border-status-info-fg/30",
+        success: "bg-status-success-bg text-status-success-fg border-status-success-fg/30",
+        warning: "bg-status-warning-bg text-status-warning-fg border-status-warning-fg/30",
+        danger: "bg-status-danger-bg text-status-danger-fg border-status-danger-fg/30",
       },
     },
     defaultVariants: { variant: "success" },
@@ -66,7 +68,8 @@ export const ToastDescription = React.forwardRef<
   React.ElementRef<typeof ToastPrimitive.Description>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitive.Description>
 >(({ className, ...props }, ref) => (
-  <ToastPrimitive.Description ref={ref} className={cn("text-xs text-muted-foreground", className)} {...props} />
+  // text-current 로 두면 Toast 의 status text 색상을 자연 상속. opacity 로 description 어조 약화.
+  <ToastPrimitive.Description ref={ref} className={cn("text-xs opacity-80", className)} {...props} />
 ));
 ToastDescription.displayName = ToastPrimitive.Description.displayName;
 

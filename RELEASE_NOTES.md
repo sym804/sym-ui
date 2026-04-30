@@ -4,8 +4,77 @@
 
 | 패키지 | 현재 버전 | 직전 버전 | 릴리즈 일자 |
 |--------|-----------|-----------|-------------|
-| @sym/ui | 0.5.0 | 0.4.0 | 2026-04-30 |
-| @sym/ui-cli | 0.5.0 | 0.4.0 | 2026-04-30 |
+| @sym/ui | 0.6.0 | 0.5.0 | 2026-04-30 |
+| @sym/ui-cli | 0.6.0 | 0.5.0 | 2026-04-30 |
+
+---
+
+## v0.6.0 - 2026-04-30
+
+Codex 평가 (8.7/10) 의 9점 갭 (intent 토큰을 정의했지만 컴포넌트가 아직 안 먹음) 을
+해소. 본 릴리즈로 v0.5.0 에서 도입한 intent 토큰이 핵심 컴포넌트와 패턴에 실제 적용됨.
+시각 회귀 게이트는 의도적으로 v0.7.0 으로 보류. Codex 예상 점수 효과: 8.7 → 9.0+.
+
+### Major (2건)
+
+- **Badge / Alert / Toast 의 status variant 를 intent token 으로 마이그레이션**
+  (frontend) - 이전 `bg-success/10 text-success` (semantic + alpha) 패턴을
+  `bg-status-success-bg text-status-success-fg` 로 교체. 다크 모드 색상 분기는 토큰의
+  `.dark` 변종이 자동 처리하므로 `dark:` 프리픽스 불필요.
+  - Badge: success / warning / danger
+  - Alert: success / warning / destructive (info 는 surface 톤 유지)
+  - Toast: info / success / warning / danger (이전엔 border 만 색조였고 bg 가 popover
+    였으나 이제 bg+text+border 모두 status 토큰)
+  ToastDescription 도 `text-muted-foreground` 에서 `opacity-80` (text-current 상속) 으로
+  변경해 status text 색을 자연스럽게 따라가도록 수정.
+  (packages/ui/src/components/{badge,alert,toast}.tsx)
+
+- **Button / Tabs / Select / DropdownMenu / DataTable 의 hover / focus 를 interactive
+  intent 토큰으로 통일** (frontend) - 컴포넌트 간 일관된 hover layer 색상.
+  - Button: secondary / outline / ghost 의 `hover:bg-muted` 또는 `hover:bg-accent` 를
+    `hover:bg-interactive-hover` 로. `active:bg-interactive-active` 도 추가 (primary /
+    destructive 는 자체 색조 hover 유지)
+  - Tabs: 비활성 TabsTrigger 에 `hover:bg-interactive-hover/60` 추가, active 시 hover
+    무효화로 시각적 jitter 방지
+  - Select: SelectItem 의 `focus:bg-accent` → `focus:bg-interactive-hover focus:text-foreground`
+  - DropdownMenu: 동일 패턴
+  - DataTable: row `hover:bg-muted` → `hover:bg-interactive-hover`
+  (packages/ui/src/components/{button,tabs,select,dropdown-menu,data-table}.tsx)
+
+### Minor (2건)
+
+- **3개 패턴 스토리에 surface-subtle / accent-brand 실사용** (etc) - v0.5.0 토큰 정의
+  단계에서 사용 사례 부재 → v0.6.0 에서 적용.
+  - SettingsPage: 페이지 외곽을 `bg-surface-subtle min-h-screen` 으로 깔아 카드와
+    layer 분리. header 에 "구독 관리" 보조 link 를 `text-accent-brand` 로 (primary CTA
+    가 아닌 brand 시그니처)
+  - DataTableWithFilters: 페이지 외곽 `bg-surface-subtle`
+  - AccountActivity: 활동 로그의 행위자 이름 `<span>` 에 `text-accent-brand`
+  (apps/docs/stories/patterns/{SettingsPage,DataTableWithFilters,AccountActivity}.stories.tsx)
+
+- **Brand/Identity.mdx 에 색상 사용 규칙 + accent-brand 가이드 추가** (etc) - 이전엔
+  "indigo 중심" 한 줄 수준이었음. Primary / Accent / Neutral / Status 별 사용처 표 +
+  안티패턴 + 다크 모드 규칙 추가. 변경 이력에 v0.5.0 / v0.6.0 항목 보강.
+  (apps/docs/stories/brand/Identity.mdx)
+
+### 검증 결과
+
+- **로컬**: typecheck (3종) ✅, lint (3종) ✅, test 37 files / 79 tests ✅,
+  @sym/ui-cli build ✅, registry:build (36 + globalsCss) ✅, storybook build 9.89s ✅
+
+### 호환성
+
+- 시각적 변화: Badge / Alert / Toast 의 status variant 색조가 약간 부드러워짐 (이전 alpha
+  10% → 새 토큰의 정해진 light 95% / dark 14% 톤). hover / focus layer 도 통일되어 더
+  자연스러운 인터랙션. 토큰 기반이라 사용자가 globals.css 의 토큰 값을 override 하면 즉시
+  반영.
+- API 변경 없음.
+
+### 의도적 미처리 (v0.7.0 이상)
+
+- **Playwright/Chromatic 시각 회귀 게이트** - 시스템이 충분히 안정된 뒤 도입할 예정.
+  현재 토큰 마이그레이션이 끝났으니 다음 사이클에서 베이스라인 캡처 → 회귀 차단으로
+  점진 도입.
 
 ---
 

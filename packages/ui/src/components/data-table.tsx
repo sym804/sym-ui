@@ -109,7 +109,8 @@ export function DataTable<TData, TValue>({
             table.getRowModel().rows.map((row) => (
               <tr
                 key={row.id}
-                className="border-b border-border transition-colors hover:bg-muted"
+                // v0.6.0: row hover 를 interactive-hover 로 통일 (멀티 컴포넌트 일관성).
+                className="border-b border-border transition-colors hover:bg-interactive-hover"
               >
                 {row.getVisibleCells().map((cell) => (
                   <td key={cell.id} className="p-4 align-middle text-foreground">

@@ -103,6 +103,8 @@ const Demo = ({ initialQuery = "", initialStatus = "all", loading }: DemoProps) 
   });
 
   return (
+    // v0.6.0: 페이지 외곽을 surface-subtle 로 깔아 카드와 layer 분리.
+    <div className="bg-surface-subtle min-h-screen">
     <div className="mx-auto max-w-5xl space-y-4 px-6 py-10">
       <Card>
         <CardHeader>
@@ -187,6 +189,7 @@ const Demo = ({ initialQuery = "", initialStatus = "all", loading }: DemoProps) 
           ) : null}
         </CardContent>
       </Card>
+    </div>
     </div>
   );
 };

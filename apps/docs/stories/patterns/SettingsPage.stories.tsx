@@ -54,11 +54,23 @@ const SettingsLayout = ({ loading, error }: SettingsLayoutProps) => {
   const [notifyPush, setNotifyPush] = React.useState(false);
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6 px-6 py-10">
+    // v0.6.0: 페이지 외곽을 surface-subtle 로 깔아 카드(bg-surface)와 layer 분리.
+    <div className="bg-surface-subtle min-h-screen">
+      <div className="mx-auto max-w-3xl space-y-6 px-6 py-10">
       <header className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-foreground">계정 설정</h1>
-          <p className="text-sm text-muted-foreground">프로필, 알림, 보안 옵션을 관리합니다.</p>
+          <p className="text-sm text-muted-foreground">
+            프로필, 알림, 보안 옵션을 관리합니다.
+            {/* v0.6.0: 페이지 안의 보조 link 에 accent-brand 사용 (primary CTA 가 아닌
+                brand 시그니처). */}
+            <a
+              href="#billing"
+              className="ml-2 text-accent-brand hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
+            >
+              구독 관리
+            </a>
+          </p>
         </div>
         <Badge variant="primary">Pro</Badge>
       </header>
@@ -176,6 +188,7 @@ const SettingsLayout = ({ loading, error }: SettingsLayoutProps) => {
           </Card>
         </TabsContent>
       </Tabs>
+      </div>
     </div>
   );
 };

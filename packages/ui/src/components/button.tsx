@@ -13,12 +13,14 @@ const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed",
   {
     variants: {
+      // v0.6.0: hover/active 를 interactive intent token 으로 통일.
+      // primary/destructive 는 자체 색조 (hover:bg-primary/90 등) 유지 (filled CTA 패턴).
       variant: {
-        primary: "bg-primary text-primary-foreground hover:bg-primary/90",
-        secondary: "bg-muted text-foreground hover:bg-accent",
-        outline: "border border-border bg-surface text-foreground hover:bg-muted",
-        ghost: "text-foreground hover:bg-muted",
-        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+        primary: "bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/85",
+        secondary: "bg-muted text-foreground hover:bg-interactive-hover active:bg-interactive-active",
+        outline: "border border-border bg-surface text-foreground hover:bg-interactive-hover active:bg-interactive-active",
+        ghost: "text-foreground hover:bg-interactive-hover active:bg-interactive-active",
+        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90 active:bg-destructive/85",
       },
       size: {
         sm: "h-8 px-3 text-xs rounded-[8px]",

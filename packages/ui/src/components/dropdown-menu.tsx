@@ -39,7 +39,8 @@ export const DropdownMenuItem = React.forwardRef<
     ref={ref}
     className={cn(
       "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none",
-      "focus:bg-accent focus:text-accent-foreground",
+      // v0.6.0: focus / hover layer 통일 (interactive-hover).
+      "focus:bg-interactive-hover focus:text-foreground",
       "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       className,
     )}

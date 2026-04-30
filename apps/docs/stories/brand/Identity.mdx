@@ -11,12 +11,52 @@ import { Meta } from "@storybook/blocks";
 - 친근: 부드러운 반경, 웜 그레이 surface
 - 신뢰: indigo 프라이머리, 명확한 상태 컬러
 
-## 사용 규칙
-- 프라이머리 indigo 는 CTA 요소에만 사용 (primary button, active state, link, focus ring)
-- 뉴트럴 (warm gray) 컬러는 surface / border / text 계층 구분 용도
-- 시맨틱 컬러 (success / warning / danger / info) 는 상태 전달 목적 외 사용 금지
-- 다크 모드 배경은 절대 밝기 L >= 15% 를 보장 (검정 회피)
+## 색상 사용 규칙
+
+### Primary (indigo)
+**CTA 와 활성 상태 전용.** 페이지의 주된 행동에만 쓴다.
+
+| 사용처 | 예시 |
+|--------|------|
+| `bg-primary` | primary Button, Switch 활성, Tabs active indicator |
+| `text-primary` | active link (선택된 메뉴), focus 강조 |
+| `ring-ring` | focus-visible 모든 곳 (= `--focus-ring` 별칭) |
+
+✗ 단순 강조나 카테고리 표시에 primary 색조 사용 금지. 의미가 희석된다.
+
+### Accent (teal, v0.5.0 도입)
+**primary 가 아닌 곳의 brand 시그니처.** indigo 가 차지하기 어려운 보조 위치에서
+"sym-ui 다움" 을 유지하기 위한 색조. 차분한 teal 계열 (`#0d9488` / `#2dd4bf`).
+
+| 사용처 | 예시 |
+|--------|------|
+| `text-accent-brand` | 페이지 안의 보조 link (page header 내부, footnote, "구독 관리" 같은 부속 링크), 활동 로그의 행위자 이름, 강조하고 싶은 인라인 텍스트 |
+| `bg-accent-brand` | 거의 사용하지 않음. 사용해야 한다면 highlight chip 또는 brand badge 한정 |
+| `border-accent-brand` | drop zone hover, 활성 카드 좌측 띠 등 미묘한 강조 |
+
+✗ primary 와 동일한 위치 (CTA Button, Form 의 주된 행동) 에 accent-brand 사용 금지.
+   두 색이 같은 의미로 보이면 brand 가 흐려진다.
+✗ 한 화면에 accent-brand 사용처가 5 곳 이상 → 시그니처가 노이즈로 변한다.
+
+### Neutral (warm gray)
+**구조 / 계층 / 텍스트 기본.** surface, border, foreground, muted-foreground 등이
+모두 이 계열에서 파생. 의미를 담지 않는다.
+
+### Status (success / warning / danger / info)
+**상태 전달 목적 외 사용 금지.** Alert / Toast / Badge 의 variant 로만 노출되며
+v0.5.0 부터 `--status-*-bg/-fg` intent 토큰으로 정형화.
+
+## 다크 모드 규칙
+
+- 다크 배경은 절대 밝기 **L >= 15%** 보장 (검정 회피)
+- `--surface-subtle` 은 background 보다 약간 진하게, `--surface-raised` 는 surface
+  보다 한 단계 위 (떠 있는 느낌)
+- focus ring 은 light/dark 모두 primary 와 동일한 색조 (`--focus-ring`)
 
 ## 변경 이력
-- v0.3.0: Primary 색조를 Tailwind blue 에서 indigo (light: #4f46e5 / dark: #818cf8) 로 변경
-  하여 brand 식별력 보강. shadcn/ui 디폴트 톤에서 차별화하기 위한 결정.
+- v0.6.0: 컴포넌트 본체가 intent 토큰을 먹기 시작 (Badge / Alert / Toast 의 status,
+  Button / Tabs / Select / DropdownMenu / DataTable 의 interactive). accent-brand
+  사용 규칙 추가.
+- v0.5.0: Intent 토큰 3계층 (status / surface / interactive) + accent-brand (teal) 도입.
+- v0.3.0: Primary 색조를 Tailwind blue 에서 indigo (light: #4f46e5 / dark: #818cf8) 로
+  변경하여 brand 식별력 보강. shadcn/ui 디폴트 톤에서 차별화하기 위한 결정.

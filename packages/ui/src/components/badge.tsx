@@ -14,6 +14,8 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../lib/utils";
 
+// v0.6.0: success / warning / danger variant 를 intent token 기반 (status-*-bg/-fg) 으로
+// 마이그레이션. 다크 모드 색상은 토큰의 .dark 변종에서 자동 처리되므로 dark: 프리픽스 불필요.
 const badgeVariants = cva(
   "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold tracking-[0.2px]",
   {
@@ -21,9 +23,9 @@ const badgeVariants = cva(
       variant: {
         primary: "bg-primary/15 text-primary",
         neutral: "bg-muted text-foreground",
-        success: "bg-success/10 text-success dark:bg-success/20",
-        warning: "bg-warning/10 text-warning dark:bg-warning/20",
-        danger: "bg-destructive/10 text-destructive",
+        success: "bg-status-success-bg text-status-success-fg",
+        warning: "bg-status-warning-bg text-status-warning-fg",
+        danger: "bg-status-danger-bg text-status-danger-fg",
         outline: "border border-border text-foreground",
       },
     },

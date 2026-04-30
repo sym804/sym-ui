@@ -77,7 +77,8 @@ export const SelectItem = React.forwardRef<
     ref={ref}
     className={cn(
       "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none text-popover-foreground",
-      "focus:bg-accent focus:text-accent-foreground",
+      // v0.6.0: focus 시 layer 를 interactive-hover 로 통일 (Dropdown / Combobox 와 일관).
+      "focus:bg-interactive-hover focus:text-foreground",
       "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       className,
     )}

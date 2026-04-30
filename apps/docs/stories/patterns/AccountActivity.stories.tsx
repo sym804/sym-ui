@@ -102,7 +102,10 @@ const Demo = ({ initialStep = 2, blocked }: DemoProps) => {
               <div className="flex items-start justify-between gap-3">
                 <div className="space-y-0.5">
                   <p className="text-foreground">
-                    <span className="font-medium">{item.who}</span> 님이 {item.what}
+                    {/* v0.6.0: 활동 로그의 행위자 이름에 accent-brand 적용 (조용한 brand
+                        시그니처. primary CTA 와 색을 분리). */}
+                    <span className="font-medium text-accent-brand">{item.who}</span>{" "}
+                    님이 {item.what}
                   </p>
                   <p className="text-xs text-muted-foreground">{item.when}</p>
                 </div>
