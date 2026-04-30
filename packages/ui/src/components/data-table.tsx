@@ -1,7 +1,7 @@
 /**
  * @registry-meta
  * name: data-table
- * dependencies: ["@tanstack/react-table"]
+ * dependencies: ["@tanstack/react-table", "lucide-react"]
  * internalDeps: ["utils"]
  */
 import * as React from "react";
@@ -13,6 +13,7 @@ import {
   type SortingState,
   useReactTable,
 } from "@tanstack/react-table";
+import { ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react";
 import { cn } from "../lib/utils";
 
 export interface DataTableProps<TData, TValue> {
@@ -79,7 +80,13 @@ export function DataTable<TData, TValue>({
                       >
                         <span>{flexRender(header.column.columnDef.header, header.getContext())}</span>
                         <span aria-hidden className="opacity-70">
-                          {sortDir === "asc" ? "▲" : sortDir === "desc" ? "▼" : "↕"}
+                          {sortDir === "asc" ? (
+                            <ArrowUp className="h-3.5 w-3.5" />
+                          ) : sortDir === "desc" ? (
+                            <ArrowDown className="h-3.5 w-3.5" />
+                          ) : (
+                            <ArrowUpDown className="h-3.5 w-3.5" />
+                          )}
                         </span>
                       </button>
                     ) : (

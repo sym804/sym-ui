@@ -1,11 +1,12 @@
 /**
  * @registry-meta
  * name: select
- * dependencies: ["@radix-ui/react-select"]
+ * dependencies: ["@radix-ui/react-select", "lucide-react"]
  * internalDeps: ["utils"]
  */
 import * as React from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
+import { ChevronDown, Check } from "lucide-react";
 import { cn } from "../lib/utils";
 
 export const Select = SelectPrimitive.Root;
@@ -29,7 +30,7 @@ export const SelectTrigger = React.forwardRef<
   >
     {children}
     <SelectPrimitive.Icon asChild>
-      <span aria-hidden="true" className="ml-2 text-muted-foreground">▾</span>
+      <ChevronDown aria-hidden className="ml-2 h-4 w-4 text-muted-foreground" />
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 ));
@@ -84,7 +85,9 @@ export const SelectItem = React.forwardRef<
   >
     <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
     <span className="absolute right-2 flex h-3.5 w-3.5 items-center justify-center">
-      <SelectPrimitive.ItemIndicator>✓</SelectPrimitive.ItemIndicator>
+      <SelectPrimitive.ItemIndicator>
+        <Check className="h-4 w-4" />
+      </SelectPrimitive.ItemIndicator>
     </span>
   </SelectPrimitive.Item>
 ));

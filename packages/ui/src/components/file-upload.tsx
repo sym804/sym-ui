@@ -1,7 +1,7 @@
 /**
  * @registry-meta
  * name: file-upload
- * dependencies: []
+ * dependencies: ["lucide-react"]
  * internalDeps: ["utils", "button"]
  *
  * 접근성: 드롭존이 button role 로 노출되어 키보드 (Enter/Space) 로 파일 선택 가능.
@@ -9,6 +9,7 @@
  * span 으로 렌더한다 (button-in-button 회피, 단일 키보드 진입점 유지).
  */
 import * as React from "react";
+import { UploadCloud } from "lucide-react";
 import { cn } from "../lib/utils";
 import { buttonVariants } from "./button";
 
@@ -78,7 +79,7 @@ export const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
             disabled && "pointer-events-none opacity-60",
           )}
         >
-          <span aria-hidden className="text-2xl text-muted-foreground">⬆</span>
+          <UploadCloud aria-hidden className="h-8 w-8 text-muted-foreground" />
           <span className="font-medium text-foreground">파일을 끌어다 놓거나 클릭하세요</span>
           <span
             aria-hidden

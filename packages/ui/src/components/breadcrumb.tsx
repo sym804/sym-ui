@@ -1,11 +1,12 @@
 /**
  * @registry-meta
  * name: breadcrumb
- * dependencies: ["@radix-ui/react-slot"]
+ * dependencies: ["@radix-ui/react-slot", "lucide-react"]
  * internalDeps: ["utils"]
  */
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
+import { ChevronRight, MoreHorizontal } from "lucide-react";
 import { cn } from "../lib/utils";
 
 export const Breadcrumb = React.forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>(
@@ -75,7 +76,7 @@ export const BreadcrumbSeparator = ({ children, className, ...props }: React.HTM
     className={cn("[&>svg]:size-3.5", className)}
     {...props}
   >
-    {children ?? <span aria-hidden>/</span>}
+    {children ?? <ChevronRight aria-hidden className="h-3.5 w-3.5" />}
   </li>
 );
 BreadcrumbSeparator.displayName = "BreadcrumbSeparator";
@@ -87,7 +88,7 @@ export const BreadcrumbEllipsis = ({ className, ...props }: React.HTMLAttributes
     className={cn("flex h-9 w-9 items-center justify-center", className)}
     {...props}
   >
-    <span aria-hidden>…</span>
+    <MoreHorizontal aria-hidden className="h-4 w-4" />
     <span className="sr-only">More</span>
   </span>
 );

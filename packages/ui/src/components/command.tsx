@@ -1,11 +1,12 @@
 /**
  * @registry-meta
  * name: command
- * dependencies: ["cmdk"]
+ * dependencies: ["cmdk", "lucide-react"]
  * internalDeps: ["utils"]
  */
 import * as React from "react";
 import { Command as CommandPrimitive } from "cmdk";
+import { Search } from "lucide-react";
 import { cn } from "../lib/utils";
 
 export const Command = React.forwardRef<
@@ -26,7 +27,7 @@ export const CommandInput = React.forwardRef<
 >(({ className, ...props }, ref) => (
   // eslint-disable-next-line react/no-unknown-property -- cmdk-input-wrapper is a styling hook recognized by cmdk and shadcn/ui convention.
   <div className="flex items-center border-b border-border px-3" cmdk-input-wrapper="">
-    <span aria-hidden className="mr-2 h-4 w-4 shrink-0 opacity-50">⌕</span>
+    <Search aria-hidden className="mr-2 h-4 w-4 shrink-0 opacity-50" />
     <CommandPrimitive.Input
       ref={ref}
       className={cn(

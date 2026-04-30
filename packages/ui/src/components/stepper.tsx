@@ -1,7 +1,7 @@
 /**
  * @registry-meta
  * name: stepper
- * dependencies: []
+ * dependencies: ["lucide-react"]
  * internalDeps: ["utils"]
  *
  * 접근성: ol 기반 + aria-current="step" 으로 현재 단계 노출.
@@ -9,6 +9,7 @@
  * children 을 flatten 한 뒤 StepperItem 만 추려 인덱스를 매긴다.
  */
 import * as React from "react";
+import { Check } from "lucide-react";
 import { cn } from "../lib/utils";
 
 export interface StepperProps extends React.HTMLAttributes<HTMLOListElement> {
@@ -90,7 +91,7 @@ export const StepperItem = React.forwardRef<HTMLLIElement, StepperItemProps>(
             !completed && !active && "border-border text-muted-foreground",
           )}
         >
-          {completed ? "✓" : index + 1}
+          {completed ? <Check className="h-3.5 w-3.5" /> : index + 1}
         </span>
         <div className="flex flex-col">
           <span

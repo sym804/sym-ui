@@ -1,12 +1,13 @@
 /**
  * @registry-meta
  * name: pagination
- * dependencies: []
+ * dependencies: ["lucide-react"]
  * internalDeps: ["utils", "button"]
  *
  * 접근성: nav 컨테이너에 aria-label="Pagination" 적용. 현재 페이지는 aria-current="page".
  */
 import * as React from "react";
+import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
 import { cn } from "../lib/utils";
 import { buttonVariants } from "./button";
 
@@ -62,7 +63,7 @@ export const PaginationPrevious = React.forwardRef<HTMLButtonElement, Pagination
       className={cn("gap-1 px-2.5", className)}
       {...props}
     >
-      <span aria-hidden>‹</span>
+      <ChevronLeft aria-hidden className="h-4 w-4" />
       <span>Previous</span>
     </PaginationLink>
   ),
@@ -79,7 +80,7 @@ export const PaginationNext = React.forwardRef<HTMLButtonElement, PaginationLink
       {...props}
     >
       <span>Next</span>
-      <span aria-hidden>›</span>
+      <ChevronRight aria-hidden className="h-4 w-4" />
     </PaginationLink>
   ),
 );
@@ -92,7 +93,7 @@ export const PaginationEllipsis = ({ className, ...props }: React.HTMLAttributes
     className={cn("flex h-9 w-9 items-center justify-center text-muted-foreground", className)}
     {...props}
   >
-    <span aria-hidden>…</span>
+    <MoreHorizontal aria-hidden className="h-4 w-4" />
     <span className="sr-only">More pages</span>
   </span>
 );

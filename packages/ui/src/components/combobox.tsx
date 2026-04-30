@@ -1,10 +1,11 @@
 /**
  * @registry-meta
  * name: combobox
- * dependencies: []
+ * dependencies: ["lucide-react"]
  * internalDeps: ["utils", "popover", "command", "button"]
  */
 import * as React from "react";
+import { ChevronDown, Check } from "lucide-react";
 import { Popover, PopoverTrigger, PopoverContent } from "./popover";
 import {
   Command,
@@ -66,7 +67,7 @@ export const Combobox = React.forwardRef<HTMLButtonElement, ComboboxProps>(
             className={cn("w-[220px] justify-between", className)}
           >
             {selected ? selected.label : placeholder}
-            <span aria-hidden className="ml-2 opacity-50">▾</span>
+            <ChevronDown aria-hidden className="ml-2 h-4 w-4 opacity-50" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-[220px] p-0">
@@ -87,7 +88,7 @@ export const Combobox = React.forwardRef<HTMLButtonElement, ComboboxProps>(
                     }}
                   >
                     {opt.label}
-                    {opt.value === value ? <span aria-hidden className="ml-auto">✓</span> : null}
+                    {opt.value === value ? <Check aria-hidden className="ml-auto h-4 w-4" /> : null}
                   </CommandItem>
                 ))}
               </CommandGroup>

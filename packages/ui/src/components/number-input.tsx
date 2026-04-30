@@ -1,13 +1,14 @@
 /**
  * @registry-meta
  * name: number-input
- * dependencies: []
+ * dependencies: ["lucide-react"]
  * internalDeps: ["utils", "button", "input"]
  *
  * 접근성: 증감 버튼은 aria-label 로 의도를 노출. native input[type=number] 가 spinbutton
  * 동작을 담당한다. value 가 비어있을 때는 undefined 로 일관 (null 은 사용하지 않음).
  */
 import * as React from "react";
+import { Minus, Plus } from "lucide-react";
 import { cn } from "../lib/utils";
 import { Button } from "./button";
 import { Input } from "./input";
@@ -76,7 +77,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
           disabled={disabled || (typeof min === "number" && (current ?? 0) <= min)}
           onClick={() => bump(-step)}
         >
-          <span aria-hidden>−</span>
+          <Minus aria-hidden className="h-4 w-4" />
         </Button>
         <Input
           ref={ref}
@@ -105,7 +106,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
           disabled={disabled || (typeof max === "number" && (current ?? 0) >= max)}
           onClick={() => bump(step)}
         >
-          <span aria-hidden>+</span>
+          <Plus aria-hidden className="h-4 w-4" />
         </Button>
       </div>
     );

@@ -1,11 +1,12 @@
 /**
  * @registry-meta
  * name: date-picker
- * dependencies: ["date-fns"]
+ * dependencies: ["date-fns", "lucide-react"]
  * internalDeps: ["utils", "calendar", "popover", "button"]
  */
 import * as React from "react";
 import { format } from "date-fns";
+import { Calendar as CalendarIcon } from "lucide-react";
 import { Popover, PopoverTrigger, PopoverContent } from "./popover";
 import { Calendar } from "./calendar";
 import { Button } from "./button";
@@ -33,7 +34,7 @@ export const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
             disabled={disabled}
             className={cn("w-[220px] justify-start text-left font-normal", !value && "text-muted-foreground", className)}
           >
-            <span aria-hidden className="mr-2">▦</span>
+            <CalendarIcon aria-hidden className="mr-2 h-4 w-4" />
             {value ? format(value, dateFormat) : placeholder}
           </Button>
         </PopoverTrigger>

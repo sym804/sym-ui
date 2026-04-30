@@ -1,0 +1,174 @@
+import type { Meta, StoryObj } from "@storybook/react";
+import * as React from "react";
+import { Search } from "lucide-react";
+import type { ColumnDef } from "@tanstack/react-table";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  Input,
+  Combobox,
+  Badge,
+  DataTable,
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationPrevious,
+  PaginationNext,
+  EmptyState,
+  Button,
+} from "@sym/ui";
+
+const meta: Meta = {
+  title: "Patterns/DataTable with Filters",
+  parameters: {
+    layout: "fullscreen",
+    docs: {
+      description: {
+        component:
+          "데이터 테이블 + 검색 + 상태 필터 + 페이지네이션 + 빈 상태가 함께 놓이는 리스트 패턴.",
+      },
+    },
+  },
+};
+export default meta;
+type Story = StoryObj;
+
+interface Order {
+  id: string;
+  customer: string;
+  amount: number;
+  status: "paid" | "pending" | "failed";
+  date: string;
+}
+
+const SAMPLE: Order[] = [
+  { id: "1001", customer: "ACME 코퍼레이션", amount: 124000, status: "paid", date: "2026-04-22" },
+  { id: "1002", customer: "Globex", amount: 87500, status: "pending", date: "2026-04-23" },
+  { id: "1003", customer: "Initech", amount: 320500, status: "paid", date: "2026-04-23" },
+  { id: "1004", customer: "Soylent Corp", amount: 56000, status: "failed", date: "2026-04-24" },
+  { id: "1005", customer: "Hooli", amount: 215000, status: "paid", date: "2026-04-25" },
+  { id: "1006", customer: "Pied Piper", amount: 41000, status: "pending", date: "2026-04-25" },
+];
+
+const STATUS_LABEL: Record<Order["status"], string> = {
+  paid: "결제 완료",
+  pending: "대기",
+  failed: "실패",
+};
+const STATUS_VARIANT: Record<Order["status"], "success" | "warning" | "danger"> = {
+  paid: "success",
+  pending: "warning",
+  failed: "danger",
+};
+
+const columns: ColumnDef<Order>[] = [
+  { accessorKey: "id", header: "주문 ID" },
+  { accessorKey: "customer", header: "고객사" },
+  {
+    accessorKey: "amount",
+    header: "금액",
+    cell: (ctx) => `₩${ctx.getValue<number>().toLocaleString("ko-KR")}`,
+  },
+  {
+    accessorKey: "status",
+    header: "상태",
+    cell: (ctx) => {
+      const v = ctx.getValue<Order["status"]>();
+      return <Badge variant={STATUS_VARIANT[v]}>{STATUS_LABEL[v]}</Badge>;
+    },
+  },
+  { accessorKey: "date", header: "날짜" },
+];
+
+const Demo = () => {
+  const [query, setQuery] = React.useState("");
+  const [status, setStatus] = React.useState<string>("all");
+  const [page, setPage] = React.useState(1);
+
+  const filtered = SAMPLE.filter((row) => {
+    if (status !== "all" && row.status !== status) return false;
+    if (query.trim() && !row.customer.includes(query) && !row.id.includes(query)) return false;
+    return true;
+  });
+
+  return (
+    <div className="mx-auto max-w-5xl space-y-4 px-6 py-10">
+      <Card>
+        <CardHeader>
+          <CardTitle>주문 목록</CardTitle>
+          <CardDescription>최근 30 일 동안의 주문을 확인합니다.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="relative w-full sm:w-72">
+              <Search aria-hidden className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                aria-label="주문 검색"
+                placeholder="고객사 또는 주문 ID"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="pl-9"
+              />
+            </div>
+            <Combobox
+              value={status}
+              onValueChange={setStatus}
+              options={[
+                { value: "all", label: "전체 상태" },
+                { value: "paid", label: "결제 완료" },
+                { value: "pending", label: "대기" },
+                { value: "failed", label: "실패" },
+              ]}
+            />
+          </div>
+
+          {filtered.length === 0 ? (
+            <EmptyState
+              title="조건에 맞는 주문이 없습니다"
+              description="검색어와 필터를 조정해 다시 시도해보세요."
+              action={
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setQuery("");
+                    setStatus("all");
+                  }}
+                >
+                  필터 초기화
+                </Button>
+              }
+            />
+          ) : (
+            <DataTable columns={columns} data={filtered} enableSorting />
+          )}
+
+          {filtered.length > 0 ? (
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious onClick={() => setPage((p) => Math.max(1, p - 1))} />
+                </PaginationItem>
+                {[1, 2, 3].map((p) => (
+                  <PaginationItem key={p}>
+                    <PaginationLink isActive={page === p} onClick={() => setPage(p)}>
+                      {p}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+                <PaginationItem>
+                  <PaginationNext onClick={() => setPage((p) => p + 1)} />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          ) : null}
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export const Default: Story = { render: () => <Demo /> };

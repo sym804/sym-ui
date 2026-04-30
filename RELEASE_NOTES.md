@@ -4,8 +4,68 @@
 
 | 패키지 | 현재 버전 | 직전 버전 | 릴리즈 일자 |
 |--------|-----------|-----------|-------------|
-| @sym/ui | 0.2.1 | 0.2.0 | 2026-04-30 |
-| @sym/ui-cli | 0.2.1 | 0.2.0 | 2026-04-30 |
+| @sym/ui | 0.3.0 | 0.2.1 | 2026-04-30 |
+| @sym/ui-cli | 0.3.0 | 0.2.1 | 2026-04-30 |
+
+---
+
+## v0.3.0 - 2026-04-30
+
+Codex 디자인 평가 (7.5/10) 에서 지적된 3가지 약점 (브랜드 식별력, 텍스트 글리프 아이콘,
+패턴 스토리 부재) 을 일괄 해소. **디자인 톤 업그레이드 릴리즈** 로, 기능적으로는 v0.2.1
+과 호환되지만 시각적 인상이 크게 바뀐다.
+
+### Major (3건)
+
+- **lucide-react 1.14.0 도입 + 11개 컴포넌트의 텍스트 글리프 교체** (frontend) -
+  유니코드 문자 (`+`, `−`, `‹`, `›`, `▾`, `▦`, `▲`, `▼`, `↕`, `…`, `⌕`, `⬆`, `✕`, `✓`)
+  로 렌더되던 아이콘을 lucide 의 정식 SVG 아이콘 (Plus, Minus, ChevronLeft/Right/Down,
+  ArrowUp/Down/UpDown, MoreHorizontal, Search, UploadCloud, X, Check, Calendar) 으로
+  교체. 일관된 stroke 굵기와 크기 (대부분 h-4 w-4) 로 시각 완성도 상향.
+  대상: combobox, date-picker, select, command, file-upload, data-table, pagination,
+  breadcrumb, sheet, stepper, number-input. 각 컴포넌트의 `@registry-meta dependencies`
+  에 `lucide-react` 추가.
+
+- **5개 패턴 스토리 추가 (Patterns/ 카테고리)** (etc) - 기존 stories 가 컴포넌트 단품
+  나열 중심이라 실제 화면에서의 리듬을 판단하기 어려웠던 약점 해소.
+  - `Patterns/Settings Page` - Tabs + Card + Form (Input, Switch, Select) + Badge + Separator
+  - `Patterns/Empty Search Results` - Input + EmptyState + Button + Search 아이콘
+  - `Patterns/File Upload Form` - Card + Alert + FileUpload + Form + Badge
+  - `Patterns/DataTable with Filters` - Card + Input + Combobox + DataTable + Pagination + EmptyState
+  - `Patterns/Account Activity` - Stepper + Card + Badge + Separator
+  (apps/docs/stories/patterns/*.stories.tsx)
+
+- **브랜드 primary 를 Indigo 로 교체 (Tailwind blue 탈피)** (frontend) - shadcn/ui
+  베이스에서 `Tailwind blue` 그대로 쓰면 brand 식별력이 약하다는 평가에 따른 변경.
+  - light mode: `--primary: 243 75% 59%` (Indigo 600 #4f46e5), `--ring` 동일
+  - dark mode: `--primary: 234 89% 74%` (Indigo 400 #818cf8, L=74 로 가시성 확보) +
+    `--primary-foreground: 240 25% 12%` (light primary 위 텍스트 대비 보강)
+  - Tailwind preset 의 `primary.50-950` 스케일도 Indigo 로 일괄 교체
+  - tokens/colors.ts 의 `primary` 객체 동기화 + 변경 의도 코멘트
+  (packages/ui/templates/globals.css, packages/ui/tailwind.preset.cjs,
+  packages/ui/src/tokens/colors.ts)
+
+### Minor (1건)
+
+- **docs 의존성 정리** (etc) - patterns 스토리에서 lucide 아이콘을 사용하므로
+  apps/docs/package.json 의 devDependencies 에 `lucide-react`, `@radix-ui/react-slot`
+  명시. pnpm strict resolution 환경에서 호이스팅에 의존하지 않도록 의존성 선언 강화.
+
+### 검증 결과
+
+- **로컬**: typecheck (@sym/ui, @sym/ui-cli, docs) ✅, lint (3종) ✅,
+  test 37 files / 79 tests ✅, @sym/ui-cli build ✅, registry:build (36 + globalsCss) ✅,
+  storybook build (9.55s, 41 stories 포함) ✅
+- **시각 변경 검증**: storybook-static 에 36 컴포넌트 stories + 5 패턴 stories 모두 정상
+  생성. 다크 모드 토글 시 indigo dark variant (L=74) 가 충분한 대비 유지.
+
+### 호환성
+
+- 컴포넌트 API 변경 없음. lucide 아이콘은 컴포넌트 내부 자식으로 렌더되므로 외부에서는
+  변화 없음.
+- primary 토큰의 색조 (blue → indigo) 변경. 사용자 프로젝트에서 globals.css 의 `--primary`
+  값을 override 했다면 그대로 유지됨. 그렇지 않다면 시각적으로 indigo 로 변경됨.
+- 새 의존성 `lucide-react@^1.14.0` 가 11개 컴포넌트에 추가. CLI add 시 자동 설치됨.
 
 ---
 

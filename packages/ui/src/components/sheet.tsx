@@ -1,7 +1,7 @@
 /**
  * @registry-meta
  * name: sheet
- * dependencies: ["@radix-ui/react-dialog", "class-variance-authority"]
+ * dependencies: ["@radix-ui/react-dialog", "class-variance-authority", "lucide-react"]
  * internalDeps: ["utils"]
  *
  * 접근성: SheetContent 사용 시 항상 SheetTitle (필수) 과 SheetDescription (강력 권장) 을
@@ -11,6 +11,7 @@
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { cva, type VariantProps } from "class-variance-authority";
+import { X } from "lucide-react";
 import { cn } from "../lib/utils";
 
 export const Sheet = DialogPrimitive.Root;
@@ -74,7 +75,7 @@ export const SheetContent = React.forwardRef<
     >
       {children}
       <SheetClose className="absolute right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">
-        <span aria-hidden>✕</span>
+        <X aria-hidden className="h-4 w-4" />
         <span className="sr-only">Close</span>
       </SheetClose>
     </DialogPrimitive.Content>
