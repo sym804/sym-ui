@@ -4,8 +4,35 @@
 
 | 패키지 | 현재 버전 | 직전 버전 | 릴리즈 일자 |
 |--------|-----------|-----------|-------------|
-| @sym/ui | 0.7.1 | 0.7.0 | 2026-04-30 |
-| @sym/ui-cli | 0.7.1 | 0.7.0 | 2026-04-30 |
+| @sym/ui | 0.7.2 | 0.7.1 | 2026-04-30 |
+| @sym/ui-cli | 0.7.2 | 0.7.1 | 2026-04-30 |
+
+---
+
+## v0.7.2 - 2026-04-30
+
+Codex 재평가 (9.2/10) 의 마지막 운영 정리. CI 가 ubuntu-latest 라 linux baseline 이
+필요한데 v0.7.1 이 win32 만 commit 한 상태였음. 사용자가 linux baseline 을 클릭 한
+번으로 main 에 들어가도록 workflow_dispatch 자동 commit 보강.
+
+### Minor (1건)
+
+- **visual-baseline.yml 의 자동 commit 단계 추가** (etc) - 이전에는 baseline 을
+  artifact 로 업로드만 하고 사용자가 다운받아 수동 commit 해야 했음. v0.7.2 부터는
+  artifact 업로드 + main 자동 commit + push 둘 다 수행. 권한: `contents: write`.
+  artifact 는 검토용으로 유지 (30일 retention). branch protection rule 이 있을 때
+  처리 안내를 README + workflow 코멘트에 명시.
+  (.github/workflows/visual-baseline.yml, README.md)
+
+### 사용 흐름
+
+GitHub Actions 탭 → "Visual Baseline (linux)" → Run workflow → 끝나면 main 에 새
+commit (`chore(visual): update linux baseline (workflow_dispatch)`) 자동 들어감 →
+이후 PR 의 visual job 이 정상 통과.
+
+### 호환성
+
+- 기능적 변경 없음. 사용자 환경에 따라 push 권한 제약이 있을 경우 PR 모드 전환 가능.
 
 ---
 
