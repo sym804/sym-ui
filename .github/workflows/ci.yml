@@ -32,3 +32,25 @@ jobs:
       - run: pnpm --filter docs build
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm --filter docs test:a11y:ci
+
+  visual:
+    runs-on: ubuntu-latest
+    needs: ci
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter docs build
+      - run: pnpm exec playwright install --with-deps chromium
+      - name: Run visual smoke
+        run: pnpm --filter docs visual
+      - name: Upload diff report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: apps/docs/playwright-report
+          retention-days: 7

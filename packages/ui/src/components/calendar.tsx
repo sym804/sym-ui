@@ -23,7 +23,7 @@ export function Calendar({ className, classNames, showOutsideDays = true, ...pro
         caption_label: "text-sm font-medium",
         nav: "space-x-1 flex items-center",
         nav_button: cn(
-          "inline-flex items-center justify-center rounded-md h-7 w-7 bg-transparent p-0 opacity-70 hover:opacity-100 hover:bg-muted",
+          "inline-flex items-center justify-center rounded-md h-7 w-7 bg-transparent p-0 opacity-70 hover:opacity-100 hover:bg-interactive-hover",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background",
         ),
         nav_button_previous: "absolute left-1",
@@ -34,7 +34,7 @@ export function Calendar({ className, classNames, showOutsideDays = true, ...pro
         row: "flex w-full mt-2",
         cell: "text-center text-sm p-0 relative focus-within:relative focus-within:z-20",
         day: cn(
-          "inline-flex items-center justify-center rounded-md h-9 w-9 p-0 font-normal aria-selected:opacity-100 hover:bg-muted",
+          "inline-flex items-center justify-center rounded-md h-9 w-9 p-0 font-normal aria-selected:opacity-100 hover:bg-interactive-hover",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background",
         ),
         day_selected:

@@ -3,6 +3,8 @@ dist
 .turbo
 .next
 storybook-static
+test-results
+playwright-report
 *.tsbuildinfo
 .DS_Store
 coverage

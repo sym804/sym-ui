@@ -4,8 +4,54 @@
 
 | 패키지 | 현재 버전 | 직전 버전 | 릴리즈 일자 |
 |--------|-----------|-----------|-------------|
-| @sym/ui | 0.7.0 | 0.6.0 | 2026-04-30 |
-| @sym/ui-cli | 0.7.0 | 0.6.0 | 2026-04-30 |
+| @sym/ui | 0.7.1 | 0.7.0 | 2026-04-30 |
+| @sym/ui-cli | 0.7.1 | 0.7.0 | 2026-04-30 |
+
+---
+
+## v0.7.1 - 2026-04-30
+
+Codex 재평가 (9.1/10) 의 4가지 잔존 cleanup. v0.7.0 에서 누락된 미세 정합성과 baseline
+부재 문제를 해소. Codex 예상 점수 효과: 9.1 → 9.2.
+
+### Major (1건)
+
+- **win32 visual baseline 10개 commit + linux baseline 생성용 workflow_dispatch
+  워크플로우 추가** (etc) - v0.7.0 의 visual job 이 baseline 부재로 fail 하던 의도된
+  상태 해소.
+  - `apps/docs/tests/visual/smoke.spec.ts-snapshots/*-chromium-win32.png` 10개 commit
+    (Windows 환경 검증용)
+  - `.github/workflows/visual-baseline.yml` 신규 (workflow_dispatch). Actions 탭에서
+    수동 트리거 → ubuntu-latest + playwright/jammy 에서 visual:update 실행 → 결과를
+    `visual-baseline-linux` artifact 로 업로드. 사용자가 다운받아 commit 하면 CI 의
+    visual job 이 정상 통과
+  - README 의 visual regression 섹션을 두 가지 baseline 생성 경로 (GitHub Actions /
+    Docker 로컬) 로 보강
+
+### Minor (3건)
+
+- **Brand/Identity.mdx 의 잔존 ring-ring 표기 정리** (etc) - v0.7.0 에서 컴포넌트는
+  ring-focus-ring 으로 통일했지만 brand 문서가 여전히 `ring-ring` 으로 안내.
+  `ring-focus-ring` 으로 정정 + "intent token, --focus-ring 직접 매핑" 설명 보강.
+
+- **Calendar 의 잔존 hover:bg-muted → hover:bg-interactive-hover** (frontend) - v0.6.0
+  에서 다른 컴포넌트는 interactive-hover 로 일괄 마이그레이션 했지만 Calendar 의 nav
+  버튼과 day cell 두 곳이 누락. interactive intent 일관성 회복.
+  (packages/ui/src/components/calendar.tsx)
+
+- **.gitignore 에 test-results / playwright-report 추가** (etc) - playwright 첫 실행 시
+  생성되는 임시 디렉토리들이 git 추적에서 제외되도록 보강.
+
+### 검증 결과
+
+- **로컬**: typecheck (3종) ✅, lint (3종) ✅, test 37 files / 79 tests ✅,
+  @sym/ui-cli build ✅, registry:build ✅, storybook build 10.01s ✅
+- **시각 회귀**: `pnpm --filter docs visual` 10 passed (win32 baseline 기준)
+
+### 호환성
+
+- 시각 변화 없음. Calendar 의 hover layer 가 interactive 로 통일되었으나 색조 동일.
+- linux baseline 은 사용자가 workflow_dispatch 또는 docker 로 별도 생성 + commit 필요.
 
 ---
 

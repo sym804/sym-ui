@@ -1,0 +1,36 @@
+name: Visual Baseline (linux)
+
+# 시각 회귀 baseline 의 linux/jammy 버전을 생성/갱신한다. CI 의 `visual` job 이 사용하는
+# baseline 과 동일 환경. workflow_dispatch 로 수동 트리거 후, 결과물 (smoke.spec.ts-snapshots
+# 디렉토리의 *-chromium-linux.png) 을 artifact 로 업로드한다.
+#
+# 사용 흐름:
+#   1. Actions 탭에서 "Visual Baseline (linux)" -> Run workflow
+#   2. 빌드 끝나면 artifact "visual-baseline-linux" 다운로드
+#   3. apps/docs/tests/visual/smoke.spec.ts-snapshots/ 에 풀어서 git commit
+#   4. 이후 CI 의 visual job 이 회귀 차단
+
+on:
+  workflow_dispatch:
+
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter docs build
+      - run: pnpm exec playwright install --with-deps chromium
+      - name: Generate linux baseline
+        run: pnpm --filter docs visual:update
+      - name: Upload baseline artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-baseline-linux
+          path: apps/docs/tests/visual/smoke.spec.ts-snapshots/*-chromium-linux.png
+          retention-days: 30
+          if-no-files-found: error

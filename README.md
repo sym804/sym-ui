@@ -97,15 +97,24 @@ pnpm --filter docs visual:update
 pnpm --filter docs visual:report
 ```
 
-**OS 일관성 주의**: 폰트 anti-aliasing 차이로 Windows / macOS / Ubuntu 베이스라인이 미세하게
-다르다. 베이스라인은 **CI 와 동일한 ubuntu-jammy 환경** 에서 생성하는 것이 표준:
+**OS 일관성 주의**: 폰트 anti-aliasing 차이로 Windows / macOS / Ubuntu 베이스라인이 픽셀
+단위로 다르다. Playwright 가 platform suffix 를 baseline 파일명에 포함 (`*-chromium-win32.png`,
+`*-chromium-linux.png` 등) 하므로, 환경별 baseline 을 모두 commit 해야 해당 환경의 visual
+job 이 통과한다.
 
-```bash
-docker run --rm -v %CD%:/work -w /work mcr.microsoft.com/playwright:v1.59.1-jammy \
-  pnpm --filter docs visual:update
-```
+**Linux (CI) baseline 생성 방법 두 가지**:
 
-생성된 `apps/docs/tests/visual/__screenshots__/*.png` 를 git 에 commit.
+1. GitHub Actions workflow (권장) - Actions 탭 → "Visual Baseline (linux)" → Run workflow
+   → artifact `visual-baseline-linux` 다운로드 → `apps/docs/tests/visual/smoke.spec.ts-snapshots/`
+   에 풀어서 commit
+2. Docker 로컬 - Docker Desktop 가동 후
+
+   ```bash
+   docker run --rm -v %CD%:/work -w /work mcr.microsoft.com/playwright:v1.59.1-jammy \
+     bash -c "corepack enable && pnpm install --frozen-lockfile && pnpm --filter docs build && pnpm --filter docs visual:update"
+   ```
+
+**Windows / macOS baseline**: 로컬에서 `pnpm --filter docs visual:update` 직접 실행.
 
 ## 배포
 
