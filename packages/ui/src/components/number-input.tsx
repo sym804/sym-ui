@@ -21,6 +21,8 @@ export interface NumberInputProps
   min?: number;
   max?: number;
   step?: number;
+  /** native input 의 aria-label. visible label 없을 때 권장. default "Number". */
+  inputAriaLabel?: string;
   decrementAriaLabel?: string;
   incrementAriaLabel?: string;
 }
@@ -43,6 +45,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
       max,
       step = 1,
       disabled,
+      inputAriaLabel = "Number",
       decrementAriaLabel = "Decrease",
       incrementAriaLabel = "Increase",
       ...rest
@@ -83,6 +86,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
           ref={ref}
           type="number"
           inputMode="decimal"
+          aria-label={inputAriaLabel}
           value={current ?? ""}
           min={min}
           max={max}

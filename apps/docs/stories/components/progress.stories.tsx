@@ -8,10 +8,10 @@ type Story = StoryObj<typeof Progress>;
 export const Values: Story = {
   render: () => (
     <div className="w-[320px] space-y-3">
-      <Progress value={25} />
-      <Progress value={50} />
-      <Progress value={75} />
-      <Progress value={100} />
+      <Progress value={25} aria-label="진행률 25%" />
+      <Progress value={50} aria-label="진행률 50%" />
+      <Progress value={75} aria-label="진행률 75%" />
+      <Progress value={100} aria-label="진행률 100%" />
     </div>
   ),
 };
@@ -19,7 +19,7 @@ export const Values: Story = {
 export const Indeterminate: Story = {
   render: () => (
     <div className="w-[320px]">
-      <Progress value={null} />
+      <Progress value={null} aria-label="진행 중" />
     </div>
   ),
 };

@@ -97,6 +97,9 @@ export const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
           ref={setRefs}
           type="file"
           accept={accept}
+          aria-label={ariaLabel}
+          aria-hidden
+          tabIndex={-1}
           multiple={multiple}
           disabled={disabled}
           className="sr-only"

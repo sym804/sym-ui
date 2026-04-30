@@ -66,7 +66,7 @@ const SettingsLayout = ({ loading, error }: SettingsLayoutProps) => {
                 brand 시그니처). */}
             <a
               href="#billing"
-              className="ml-2 text-accent-brand hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
+              className="ml-2 text-accent-brand underline underline-offset-4 hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
             >
               구독 관리
             </a>
@@ -125,7 +125,7 @@ const SettingsLayout = ({ loading, error }: SettingsLayoutProps) => {
                   <div className="space-y-2">
                     <Label htmlFor="lang">언어</Label>
                     <Select defaultValue="ko" disabled={!!error}>
-                      <SelectTrigger id="lang">
+                      <SelectTrigger id="lang" aria-label="언어">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>

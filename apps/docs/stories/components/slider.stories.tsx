@@ -19,7 +19,13 @@ export const Default: Story = {
 };
 
 export const Range: Story = {
-  args: { defaultValue: [20, 80], max: 100, step: 1, "aria-label": "Range" },
+  args: {
+    defaultValue: [20, 80],
+    max: 100,
+    step: 1,
+    "aria-label": "Range",
+    thumbAriaLabels: ["Min", "Max"],
+  },
   render: (args) => (
     <div className="w-64">
       <Slider {...args} />
